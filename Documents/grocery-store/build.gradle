@@ -1,0 +1,79 @@
+plugins {
+	id 'groovy'
+	id 'org.springframework.boot' version '3.3.4'          // use stable 3.x
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.grocerystore'
+version = '0.0.1-SNAPSHOT'
+description = 'Demo project for Grocery Store'
+
+java {
+	sourceCompatibility = '17'
+	targetCompatibility = '17'
+}
+
+// Ensure parameter names are preserved for reflection
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-parameters'
+}
+
+tasks.withType(GroovyCompile).configureEach {
+    groovyOptions.parameters = true
+    groovyOptions.optimizationOptions.indy = true
+    options.compilerArgs << '-parameters'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+
+	// Web + REST
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'    // For JSON processing
+
+	// JPA / Hibernate
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	
+	// Database Migrations
+	implementation 'org.flywaydb:flyway-core'
+	implementation 'org.flywaydb:flyway-mysql'
+	
+	// Validation
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	
+	// SpringDoc OpenAPI (Swagger)
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+	implementation 'org.springdoc:springdoc-openapi-starter-common:2.3.0'
+
+	// Groovy support - using consistent version 4.0.23
+	implementation 'org.apache.groovy:groovy:4.0.23'
+
+	// MySQL driver (matches your application.properties)
+	runtimeOnly 'com.mysql:mysql-connector-j'
+
+	// Tests
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// If you need JSON support, use the matching Groovy version
+	implementation 'org.apache.groovy:groovy-json:4.0.23'
+	
+	// Jackson for JSON processing
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1'
+
+
+	// Redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	//Email
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf' // For email templates
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

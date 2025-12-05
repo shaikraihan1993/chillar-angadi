@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grocery Store</title>
+    <script>
+        // Redirect to store page
+        window.location.href = 'store.html';
+    </script>
+</head>
+<body>
+    <p>If you are not redirected automatically, <a href="store.html">click here</a>.</p>
+</body>
+</html>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f5f5f5;
+      color: #333;
+      line-height: 1.6;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* Header styles */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin: 0;
+    }
+
+    /* Search bar */
+    .search-container {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    #searchInput {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      min-width: 250px;
+      font-size: 14px;
+    }
+
+    /* Button styles */
+    .btn {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      border: 1px solid transparent;
+      background-color: #e9ecef;
+      color: #212529;
+    }
+
+    .btn:hover {
+      background-color: #dde2e6;
+    }
+
+    .btn-primary {
+      background-color: #3498db;
+      border-color: #3498db;
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background-color: #2980b9;
+      border-color: #2980b9;
+    }
+
+    .btn-danger {
+      background-color: #e74c3c;
+      border-color: #e74c3c;
+      color: #fff;
+    }
+
+    .btn-danger:hover {
+      background-color: #c0392b;
+      border-color: #c0392b;
+    }
+
+    .btn-secondary {
+      background-color: #6c757d;
+      border-color: #6c757d;
+      color: #fff;
+    }
+
+    .btn-secondary:hover {
+      background-color: #5a6268;
+      border-color: #545b62;
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 13px;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* Table styles */
+    .table-container {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .table th,
+    .table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    .table th {
+      background-color: #f8f9fa;
+      font-weight: 600;
+      color: #2c3e50;
+      white-space: nowrap;
+    }
+
+    .table tbody tr:hover {
+      background-color: #f8f9fa;
+    }
+
+    .table td {
+      vertical-align: middle;
+    }
+
+    .table tbody tr.low-stock {
+      background-color: #fff4e5;
+    }
+
+    .table tbody tr.low-stock:hover {
+      background-color: #ffe3c4;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    /* Pagination */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      padding: 20px 0;
+      margin: 0;
+    }
+
+    .page-item {
+      margin: 0 4px;
+    }
+
+    .page-link {
+      display: block;
+      padding: 6px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      color: #3498db;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .page-link:hover {
+      background-color: #f0f0f0;
+    }
+
+    .page-item.active .page-link {
+      background-color: #3498db;
+      color: white;
+      border-color: #3498db;
+    }
+
+    .page-item.disabled .page-link {
+      color: #6c757d;
+      pointer-events: none;
+      background-color: #f8f9fa;
+      border-color: #dee2e6;
+    }
+
+    /* Form styles */
+    .form-container {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    /* Utility classes */
+    .mt-3 { margin-top: 1rem; }
+    .mb-3 { margin-bottom: 1rem; }
+    .text-muted { color: #6c757d; }
+
+    .status-message {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .status-message.success {
+      color: #27ae60;
+    }
+
+    .status-message.error {
+      color: #e74c3c;
+    }
+
+    /* Header and User Profile */
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .header-container .search-container {
+      display: flex;
+      gap: 10px;
+      flex-grow: 1;
+      max-width: 600px;
+    }
+
+    .header-container #searchInput {
+      flex-grow: 1;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .user-profile {
+      margin-left: 20px;
+    }
+
+    .dropdown-menu {
+      min-width: 200px;
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+      border: none;
+      border-radius: 8px;
+      padding: 8px 0;
+    }
+
+    .dropdown-item {
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dropdown-item i {
+      width: 20px;
+      text-align: center;
+    }
+
+    .dropdown-divider {
+      margin: 8px 0;
+    }
+
+    .btn-link {
+      text-decoration: none;
+      color: #2c3e50;
+      padding: 8px 12px;
+    }
+
+    .btn-link:hover {
+      color: #1a252f;
+      text-decoration: none;
+    }
+
+    #userGreeting {
+      margin-left: 6px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .header-container {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .header-container .search-container {
+        width: 100%;
+      }
+
+      .user-profile {
+        margin-left: 0;
+        width: 100%;
+        text-align: right;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="auth-container">
+  <div class="tabs">
+    <button class="tab-button active" type="button" onclick="showTab('login', this)">Login</button>
+    <button class="tab-button" type="button" onclick="showTab('signup', this)">Sign Up</button>
+  </div>
+
+  <!-- Login Form -->
+  <div id="login" class="tab-content active">
+    <h2>Login to Your Account</h2>
+    <!-- Updated: no iframe, using fetch-based handleLogin -->
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label for="loginUsername">Username</label>
+        <input type="text" id="loginUsername" name="username" required class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" name="password" required class="form-control">
+      </div>
+      <button type="submit" class="btn btn-primary mt-2">Login</button>
+    </form>
+    <div id="loginMessage" class="message"></div>
+  </div>
+
+  <!-- Signup Form -->
+  <div id="signup" class="tab-content">
+    <h2>Create New Account</h2>
+    <form id="signupForm" onsubmit="handleSignup(event)">
+      <div class="form-group">
+        <label for="signupUsername">Username</label>
+        <input type="text" id="signupUsername" required class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="signupEmail">Email</label>
+        <input type="email" id="signupEmail" required class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="signupPassword">Password</label>
+        <input type="password" id="signupPassword" required class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input type="text" id="firstName" required class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" required class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="phoneNumber">Phone Number</label>
+        <input type="tel" id="phoneNumber" required class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="address">Address</label>
+        <textarea id="address" rows="2" required class="form-control"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary mt-2">Sign Up</button>
+    </form>
+    <div id="signupMessage" class="message"></div>
+  </div>
+</div>
+
+<!-- Main Content (initially hidden) -->
+<div id="mainContent" style="display: none;">
+  <div class="header-container">
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Search products...">
+      <button class="btn btn-primary" id="searchBtn" type="button">
+        <i class="bi bi-search"></i> Search
+      </button>
+      <button class="btn btn-secondary" id="clearSearchBtn" type="button">
+        <i class="bi bi-x"></i> Clear
+      </button>
+    </div>
+    <div class="user-profile">
+      <div class="dropdown">
+        <button class="btn btn-link dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-person-circle"></i>
+          <span id="userGreeting">Guest</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+          <li><a class="dropdown-item" href="#" id="profileLink"><i class="bi bi-person"></i> Profile</a></li>
+          <li><a class="dropdown-item" href="#" id="ordersLink"><i class="bi bi-box-seam"></i> My Orders</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item text-danger" href="#" id="logoutBtn"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Qty</th>
+        <th class="text-center">Has Image</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody id="products-table-body">
+      <!-- rows will be added here -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <nav aria-label="Product pagination">
+    <ul class="pagination" id="pagination">
+      <li class="page-item disabled" id="prev-page">
+        <a class="page-link" href="#" tabindex="-1" aria-disabled="true" onclick="changePage(currentPage - 1); return false;">Previous</a>
+      </li>
+      <li class="page-item active"><a class="page-link" href="#" onclick="changePage(1); return false;">1</a></li>
+      <li class="page-item" id="next-page">
+        <a class="page-link" href="#" onclick="changePage(2); return false;">Next</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<script>
+  // Global variables
+  const API_URL = '/api/v1/products';
+  const AUTH_URL = '/api/auth';
+  let editingId = null;
+  let products = [];
+  let currentUser = null;
+  let currentPage = 1;
+  let totalPages = 1;
+  const pageSize = 10;
+
+  // Tab switching
+  function showTab(tabId, buttonEl) {
+    // Hide all tab contents
+    document.querySelectorAll('.tab-content').forEach(tab => {
+      tab.classList.remove('active');
+    });
+
+    // Remove active class from all tab buttons
+    document.querySelectorAll('.tab-button').forEach(button => {
+      button.classList.remove('active');
+    });
+
+    // Show the selected tab and activate its button
+    const tab = document.getElementById(tabId);
+    if (tab) {
+      tab.classList.add('active');
+    }
+    if (buttonEl) {
+      buttonEl.classList.add('active');
+    }
+  }
+
+  // Handle login form submission (simple redirect)
+  function handleLogin(event) {
+    event.preventDefault();
+    // Just redirect to store page without any authentication
+    window.location.href = 'store.html';
+  }
+
+  // Handle signup form submission
+  function handleSignup(event) {
+    event.preventDefault();
+    const messageEl = document.getElementById('signupMessage');
+    messageEl.textContent = 'Redirecting to store...';
+    messageEl.className = 'message success';
+    // Just redirect to store page
+    window.location.href = 'store.html';
+  }
+
+  // Initialize the page
+  document.addEventListener('DOMContentLoaded', () => {
+    // Directly show the main content since we're not using authentication
+    const mainContent = document.getElementById('mainContent');
+    if (mainContent) mainContent.style.display = 'block';
+  });
+    updateAuthUI();
+
+    // Switch to login tab
+    const loginTabButton = document.querySelector('.tab-button:nth-child(1)');
+    showTab('login', loginTabButton);
+  }
+
+  function setStatusMessage(text, type = '') {
+    const statusEl = document.getElementById('statusMessage');
+    if (!statusEl) return;
+    statusEl.textContent = text || '';
+    statusEl.className = 'status-message';
+    if (type) {
+      statusEl.classList.add(type === 'error' ? 'error' : 'success');
+    }
+  }
+
+  function resetForm() {
+    editingId = null;
+    const formTitle = document.getElementById("form-title");
+    if (formTitle) formTitle.textContent = "Add New Product";
+
+    const nameEl = document.getElementById("name");
+    const descEl = document.getElementById("description");
+    const priceEl = document.getElementById("price");
+    const qtyEl = document.getElementById("quantity");
+    const imageInput = document.getElementById('image');
+    const imagePreview = document.getElementById('image-preview');
+    const preview = document.getElementById('preview');
+    const imageIdEl = document.getElementById('imageId');
+
+    if (nameEl) nameEl.value = "";
+    if (descEl) descEl.value = "";
+    if (priceEl) priceEl.value = "";
+    if (qtyEl) qtyEl.value = "";
+    if (imageInput) imageInput.value = '';
+    if (imagePreview) imagePreview.style.display = 'none';
+    if (preview) preview.src = '#';
+    if (imageIdEl) imageIdEl.value = '';
+
+    setStatusMessage('');
+  }
+
+  async function loadProducts(page = 1) {
+    const searchInput = document.getElementById('searchInput');
+    const searchTerm = searchInput ? searchInput.value : '';
+    try {
+      const response = await fetch(
+        `${API_URL}?name=${encodeURIComponent(searchTerm)}&page=${page - 1}&size=${pageSize}`
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to load products');
+      }
+
+      const data = await response.json();
+      products = data.products || [];
+      totalPages = Math.max(data.totalPages || 1, 1);
+      currentPage = (typeof data.currentPage === 'number' ? data.currentPage : 0) + 1;
+      if (currentPage > totalPages) {
+        currentPage = totalPages;
+      }
+
+      renderProducts(products);
+      updatePagination();
+    } catch (error) {
+      console.error('Error loading products:', error);
+      setStatusMessage(error.message, 'error');
+    }
+  }
+
+  function clearSearch() {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+      searchInput.value = '';
+    }
+    loadProducts(1);
+  }
+
+  function changePage(page) {
+    if (page < 1 || page > totalPages || page === currentPage) {
+      return;
+    }
+    loadProducts(page);
+  }
+
+  function updatePagination() {
+    const paginationEl = document.getElementById('pagination');
+    if (!paginationEl) return;
+
+    let paginationHtml = '';
+    const maxVisiblePages = 5;
+    let startPage, endPage;
+
+    if (totalPages <= maxVisiblePages) {
+      startPage = 1;
+      endPage = totalPages;
+    } else {
+      const maxPagesBeforeCurrent = Math.floor(maxVisiblePages / 2);
+      const maxPagesAfterCurrent = Math.ceil(maxVisiblePages / 2) - 1;
+
+      if (currentPage <= maxPagesBeforeCurrent) {
+        startPage = 1;
+        endPage = maxVisiblePages;
+      } else if (currentPage + maxPagesAfterCurrent >= totalPages) {
+        startPage = totalPages - maxVisiblePages + 1;
+        endPage = totalPages;
+      } else {
+        startPage = currentPage - maxPagesBeforeCurrent;
+        endPage = currentPage + maxPagesAfterCurrent;
+      }
+    }
+
+    // Previous button
+    paginationHtml += `
+      <li class="page-item ${currentPage === 1 ? 'disabled' : ''}" id="prev-page">
+        <a class="page-link" href="#" tabindex="-1" onclick="changePage(${currentPage - 1}); return false;">Previous</a>
+      </li>`;
+
+    // Page numbers
+    for (let i = startPage; i <= endPage; i++) {
+      paginationHtml += `
+        <li class="page-item ${i === currentPage ? 'active' : ''}">
+          <a class="page-link" href="#" onclick="changePage(${i}); return false;">${i}</a>
+        </li>`;
+    }
+
+    // Next button
+    paginationHtml += `
+      <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}" id="next-page">
+        <a class="page-link" href="#" onclick="changePage(${currentPage + 1}); return false;">Next</a>
+      </li>`;
+
+    paginationEl.innerHTML = paginationHtml;
+  }
+
+  function renderProducts(products) {
+    const tbody = document.getElementById("products-table-body");
+    if (!tbody) return;
+
+    tbody.innerHTML = "";
+
+    if (!products || products.length === 0) {
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+      td.colSpan = 7;
+      td.textContent = "No products found.";
+      td.style.textAlign = "center";
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+      updatePagination();
+      return;
+    }
+
+    products.forEach(product => {
+      const tr = document.createElement("tr");
+
+      // Handle both old (images array) and new (single image) formats
+      let imageUrl = '';
+      let imageId = '';
+      let hasImage = false;
+
+      // Check new format first (product.image)
+      if (product.image) {
+        hasImage = true;
+        imageUrl = product.image.imageUrl || `/api/v1/images/${product.image.id}`;
+        imageId = product.image.id;
+      }
+      // Fall back to old format (product.images array)
+      else if (product.images && product.images.length > 0) {
+        hasImage = true;
+        const firstImage = product.images[0];
+        imageUrl = firstImage.imageUrl || `/api/v1/images/${firstImage.id}`;
+        imageId = firstImage.id;
+      }
+      // Fall back to mainImageUrl if available
+      else if (product.mainImageUrl) {
+        hasImage = true;
+        imageUrl = product.mainImageUrl;
+      }
+
+      const quantityValue = product.quantity != null ? product.quantity : 0;
+
+      if (quantityValue < 5) {
+        tr.classList.add('low-stock');
+      }
+
+      // Format price to 2 decimal places
+      const formattedPrice = product.price != null ? parseFloat(product.price).toFixed(2) : "0.00";
+
+      tr.innerHTML = `
+        <td>${product.id}</td>
+        <td>${escapeHtml(product.name || "")}</td>
+        <td>${escapeHtml(product.description || "")}</td>
+        <td>$${formattedPrice}</td>
+        <td>${quantityValue}</td>
+        <td style="text-align: center;">${hasImage ? '✅' : '❌'}</td>
+        <td>
+          <button class="btn btn-sm btn-primary" onclick="startEdit(${product.id}, '${escapeQuotes(product.name || '')}', '${escapeQuotes(product.description || '')}', ${product.price || 0}, ${product.quantity || 0}, '${imageUrl}', '${imageId}'); return false;">Edit</button>
+          <button class="btn btn-sm btn-danger" onclick="deleteProduct(${product.id}); return false;">Delete</button>
+        </td>
+      `;
+
+      tbody.appendChild(tr);
+    });
+
+    updatePagination();
+  }
+
+  // Helper function to escape HTML special characters
+  function escapeHtml(unsafe) {
+    return String(unsafe || '')
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function escapeQuotes(text) {
+    if (!text) return "";
+    return String(text).replace(/'/g, "\\'");
+  }
+
+  async function uploadImage(productId) {
+    const fileInput = document.getElementById('image');
+    if (!fileInput || !fileInput.files || !fileInput.files[0]) {
+      throw new Error('Please select an image file');
+    }
+
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+
+    // If we have a productId, include it in the initial upload
+    if (productId) {
+      formData.append('productId', productId);
+    }
+
+    try {
+      const uploadResponse = await fetch('/api/v1/upload' + (productId ? `?productId=${productId}` : ''), {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!uploadResponse.ok) {
+        const error = await uploadResponse.json().catch(() => ({}));
+        throw new Error(error.error || 'Failed to upload image');
+      }
+
+      const result = await uploadResponse.json();
+      return { id: result.id };
+    } catch (error) {
+      console.error('Error processing image:', error);
+      throw error;
+    }
+  }
+
+  async function startEdit(id, name, description, price, quantity, imageUrl, imageId) {
+    editingId = id;
+    const formTitle = document.getElementById("form-title");
+    const nameEl = document.getElementById("name");
+    const descEl = document.getElementById("description");
+    const priceEl = document.getElementById("price");
+    const qtyEl = document.getElementById("quantity");
+    const preview = document.getElementById('preview');
+    const imagePreview = document.getElementById('image-preview');
+    const imageIdEl = document.getElementById('imageId');
+
+    if (formTitle) formTitle.textContent = "Edit Product (ID " + id + ")";
+    if (nameEl) nameEl.value = name;
+    if (descEl) descEl.value = description;
+    if (priceEl) priceEl.value = price;
+    if (qtyEl) qtyEl.value = quantity;
+
+    if (preview) preview.src = '';
+    if (imagePreview) imagePreview.style.display = 'none';
+
+    try {
+      const response = await fetch(`${API_URL}/${id}`);
+      if (response.ok) {
+        const product = await response.json();
+
+        let finalImageUrl = '';
+        let finalImageId = '';
+
+        if (product.image) {
+          finalImageUrl = product.image.imageUrl || `/api/v1/images/${product.image.id}`;
+          finalImageId = product.image.id;
+        } else if (product.images && product.images.length > 0) {
+          const firstImage = product.images[0];
+          finalImageUrl = firstImage.imageUrl || `/api/v1/images/${firstImage.id}`;
+          finalImageId = firstImage.id;
+        } else if (imageUrl) {
+          finalImageUrl = imageUrl;
+          finalImageId = imageId || '';
+        }
+
+        if (finalImageUrl && preview && imagePreview) {
+          if (!finalImageUrl.startsWith('http') && !finalImageUrl.startsWith('/')) {
+            finalImageUrl = `/${finalImageUrl}`;
+          }
+          if (!finalImageUrl.startsWith('http')) {
+            finalImageUrl = window.location.origin + finalImageUrl;
+          }
+
+          preview.onload = function() {
+            imagePreview.style.display = 'block';
+          };
+          preview.onerror = function() {
+            console.error('Failed to load image:', finalImageUrl);
+            imagePreview.style.display = 'none';
+          };
+
+          preview.src = finalImageUrl;
+          if (imageIdEl) imageIdEl.value = finalImageId;
+        } else {
+          if (imagePreview) imagePreview.style.display = 'none';
+          if (imageIdEl) imageIdEl.value = '';
+        }
+      } else {
+        throw new Error('Failed to fetch product details');
+      }
+    } catch (error) {
+      console.error('Error fetching product details:', error);
+      if (imageUrl && preview && imagePreview) {
+        const fallbackUrl = imageUrl.startsWith('http') ? imageUrl : `${window.location.origin}${imageUrl}`;
+        preview.onload = function() {
+          imagePreview.style.display = 'block';
+        };
+        preview.onerror = function() {
+          console.error('Failed to load fallback image:', fallbackUrl);
+          imagePreview.style.display = 'none';
+        };
+        preview.src = fallbackUrl;
+        if (imageIdEl) imageIdEl.value = imageId || '';
+      } else {
+        if (imagePreview) imagePreview.style.display = 'none';
+        if (imageIdEl) imageIdEl.value = '';
+      }
+    }
+
+    setStatusMessage('Editing product ' + id);
+  }
+
+  async function saveProduct() {
+    setStatusMessage('');
+    const imageIdEl = document.getElementById('imageId');
+    const imageInput = document.getElementById('image');
+    const nameEl = document.getElementById('name');
+    const descEl = document.getElementById('description');
+    const priceEl = document.getElementById('price');
+    const qtyEl = document.getElementById('quantity');
+
+    if (!nameEl || !priceEl || !qtyEl) {
+      console.warn("Product form elements not found.");
+      return;
+    }
+
+    const imageId = imageIdEl ? imageIdEl.value : '';
+    const imageFile = imageInput && imageInput.files ? imageInput.files[0] : null;
+
+    try {
+      let uploadedImageId = imageId;
+      if (imageFile) {
+        try {
+          const uploadResult = await uploadImage(editingId || '');
+          uploadedImageId = uploadResult.id;
+        } catch (error) {
+          console.error('Image upload failed:', error);
+          setStatusMessage('Failed to upload image: ' + (error.message || 'Unknown error'), 'error');
+          return;
+        }
+      }
+
+      const product = {
+        name: nameEl.value,
+        description: descEl ? descEl.value : '',
+        price: parseFloat(priceEl.value),
+        quantity: parseInt(qtyEl.value) || 0,
+        imageId: uploadedImageId || null
+      };
+
+      if (!product.name) {
+        setStatusMessage("Name is required.", 'error');
+        return;
+      }
+      if (isNaN(product.price) || product.price <= 0) {
+        setStatusMessage("Valid price is required.", 'error');
+        return;
+      }
+
+      const method = editingId ? "PUT" : "POST";
+      let url = API_URL;
+
+      if (editingId) {
+        url += "/" + editingId;
+      }
+
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(product)
+      });
+
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.message || "Failed to save product");
+      }
+
+      const savedProduct = await response.json();
+
+      if (imageFile) {
+        try {
+          await uploadImage(savedProduct.id);
+        } catch (error) {
+          console.error('Image upload failed:', error);
+          setStatusMessage('Product saved, but failed to upload image: ' + (error.message || 'Unknown error'), 'error');
+          loadProducts(editingId ? currentPage : 1);
+          return;
+        }
+      }
+
+      resetForm();
+      setStatusMessage("Product saved successfully.", 'success');
+      loadProducts(editingId ? currentPage : 1);
+    } catch (e) {
+      console.error("Error:", e);
+      setStatusMessage(e.message || 'Something went wrong while saving.', 'error');
+    }
+  }
+
+  async function deleteProduct(id) {
+    if (!confirm("Delete product with ID " + id + "?")) return;
+
+    setStatusMessage('');
+    try {
+      const res = await fetch(API_URL + "/" + id, { method: "DELETE" });
+      if (!res.ok && res.status !== 404) {
+        throw new Error("Delete failed: " + res.status);
+      }
+      setStatusMessage("Product deleted.", 'success');
+      loadProducts(Math.min(currentPage, totalPages));
+    } catch (e) {
+      console.error(e);
+      setStatusMessage(e.message || 'Failed to delete product.', 'error');
+    }
+  }
+
+  // Manual redirect function (kept for potential use)
+  function redirectToStore() {
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    const token = localStorage.getItem('token');
+
+    if (user && token) {
+      console.log('Manual redirect to store page');
+      window.location.href = '/store.html';
+    } else {
+      console.error('Cannot redirect: Missing user or token');
+      const messageEl = document.getElementById('loginMessage');
+      if (messageEl) {
+        messageEl.textContent = 'Please log in first';
+        messageEl.className = 'message error';
+      }
+    }
+  }
+
+  // DOMContentLoaded
+  document.addEventListener('DOMContentLoaded', () => {
+    // Restore saved user if any
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      try {
+        currentUser = JSON.parse(savedUser);
+      } catch (e) {
+        console.error('Failed to parse saved user:', e);
+        currentUser = null;
+      }
+    }
+
+    // Auth UI setup
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        logout();
+      });
+    }
+
+    // Product form bindings (guarded)
+    const productForm = document.getElementById('productForm');
+    if (productForm) {
+      productForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        saveProduct();
+      });
+    }
+
+    const clearBtn = document.getElementById('clearBtn');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        resetForm();
+      });
+    }
+
+    const imageInput = document.getElementById('image');
+    const imagePreview = document.getElementById('image-preview');
+    const preview = document.getElementById('preview');
+    const imageIdEl = document.getElementById('imageId');
+
+    if (imageInput && imagePreview && preview) {
+      imageInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            preview.src = event.target.result;
+            imagePreview.style.display = 'block';
+          };
+          reader.readAsDataURL(file);
+          if (imageIdEl) imageIdEl.value = '';
+        }
+      });
+    }
+
+    // Search & pagination bindings
+    const searchBtn = document.getElementById('searchBtn');
+    if (searchBtn) {
+      searchBtn.addEventListener('click', () => {
+        loadProducts(1);
+      });
+    }
+
+    const clearSearchBtn = document.getElementById('clearSearchBtn');
+    if (clearSearchBtn) {
+      clearSearchBtn.addEventListener('click', () => {
+        clearSearch();
+      });
+    }
+
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+      searchInput.addEventListener('keyup', (event) => {
+        if (event.key === 'Enter') {
+          loadProducts(1);
+        }
+      });
+      searchInput.focus();
+    }
+
+    // Initialize UI based on auth state
+    updateAuthUI();
+
+    // If logged in, load products
+    if (currentUser) {
+      loadProducts();
+    }
+  });
+</script>
+
+<!-- Bootstrap JS Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // Initialize Bootstrap dropdowns
+  document.addEventListener('DOMContentLoaded', () => {
+    var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+    dropdownElementList.map(function (dropdownToggleEl) {
+      return new bootstrap.Dropdown(dropdownToggleEl);
+    });
+  });
+</script>
+</body>
+</html>

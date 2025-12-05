@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Dashboard - Grocery Store Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .sidebar {
+            min-height: calc(100vh - 56px);
+            background-color: #f8f9fa;
+            padding: 20px 0;
+        }
+        .nav-link {
+            color: #333;
+            padding: 10px 20px;
+            margin: 5px 10px;
+            border-radius: 5px;
+        }
+        .nav-link:hover, .nav-link.active {
+            background-color: #e9ecef;
+            color: #0d6efd;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .card {
+            margin-bottom: 20px;
+            border: none;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            height: 100%;
+        }
+        .card-header {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        .metric-card {
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+            color: white;
+            margin-bottom: 20px;
+        }
+        .metric-card i {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .metric-card .value {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .metric-card .label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Grocery Store Analytics</a>
+            <div>
+                <a href="/store.html" class="btn btn-outline-light me-2">
+                    <i class="bi bi-shop"></i> Back to Store
+                </a>
+                <a href="/admin/index.html" class="btn btn-outline-light me-2">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                <a href="/admin/products.html" class="btn btn-outline-light me-2">
+                    <i class="bi bi-box-seam"></i> Products
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="d-flex flex-column flex-shrink-0 p-3">
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        <li class="nav-item">
+                            <a href="/admin/index.html" class="nav-link">
+                                <i class="bi bi-speedometer2 me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/products.html" class="nav-link">
+                                <i class="bi bi-box-seam me-2"></i>
+                                Products
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link active">
+                                <i class="bi bi-graph-up me-2"></i>
+                                Analytics
+                            </a>
+                        </li>
+                    </ul>
+                    <hr>
+                    <div class="dropdown">
+                        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle fs-4 me-2"></i>
+                            <strong>Admin</strong>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logoutBtn">Sign out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Analytics Dashboard</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Today</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Week</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary active">Month</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Year</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Metrics Row -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="metric-card bg-primary">
+                            <i class="bi bi-currency-dollar"></i>
+                            <div class="value">$12,345</div>
+                            <div class="label">Total Revenue</div>
+                            <small class="text-white-50">+12% from last month</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="metric-card bg-success">
+                            <i class="bi bi-cart-check"></i>
+                            <div class="value">156</div>
+                            <div class="label">Total Orders</div>
+                            <small class="text-white-50">+8% from last month</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="metric-card bg-warning">
+                            <i class="bi bi-people"></i>
+                            <div class="value">89</div>
+                            <div class="label">New Customers</div>
+                            <small class="text-white-50">+15% from last month</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="metric-card bg-info">
+                            <i class="bi bi-box-seam"></i>
+                            <div class="value">1,234</div>
+                            <div class="label">Products in Stock</div>
+                            <small class="text-white-50">42 low in stock</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                Sales Overview
+                                <div class="float-end">
+                                    <select class="form-select form-select-sm" id="salesPeriod" style="width: auto; display: inline-block;">
+                                        <option>Last 7 Days</option>
+                                        <option selected>Last 30 Days</option>
+                                        <option>Last 3 Months</option>
+                                        <option>This Year</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="salesChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                Sales by Category
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="categoryChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tables Row -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                Recent Orders
+                                <a href="#" class="float-end">View All</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Customer</th>
+                                            <th>Date</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentOrders">
+                                        <!-- Will be populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                Top Selling Products
+                                <a href="/admin/products.html" class="float-end">Manage</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Category</th>
+                                            <th>Price</th>
+                                            <th>Sold</th>
+                                            <th>Revenue</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="topProducts">
+                                        <!-- Will be populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Sample data - In a real app, this would come from an API
+        const salesData = {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+            datasets: [{
+                label: 'Sales',
+                data: [12000, 19000, 3000, 5000, 2000, 3000, 10000],
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                tension: 0.4,
+                fill: true
+            }]
+        };
+
+        const categoryData = {
+            labels: ['Fruits', 'Vegetables', 'Dairy', 'Bakery', 'Meat'],
+            datasets: [{
+                data: [30, 25, 20, 15, 10],
+                backgroundColor: [
+                    '#4e73df',
+                    '#1cc88a',
+                    '#36b9cc',
+                    '#f6c23e',
+                    '#e74a3b'
+                ],
+                hoverOffset: 4
+            }]
+        };
+
+        const recentOrders = [
+            { id: '#ORD-001', customer: 'John Doe', date: '2023-06-15', amount: 125.99, status: 'Completed' },
+            { id: '#ORD-002', customer: 'Jane Smith', date: '2023-06-14', amount: 89.50, status: 'Processing' },
+            { id: '#ORD-003', customer: 'Robert Johnson', date: '2023-06-14', amount: 210.25, status: 'Shipped' },
+            { id: '#ORD-004', customer: 'Emily Davis', date: '2023-06-13', amount: 56.75, status: 'Completed' },
+            { id: '#ORD-005', customer: 'Michael Wilson', date: '2023-06-12', amount: 178.90, status: 'Pending' }
+        ];
+
+        const topProducts = [
+            { name: 'Organic Bananas', category: 'Fruits', price: 0.99, sold: 1560, revenue: 1544.40 },
+            { name: 'Whole Wheat Bread', category: 'Bakery', price: 2.99, sold: 890, revenue: 2661.10 },
+            { name: 'Free Range Eggs (Dozen)', category: 'Dairy', price: 4.99, sold: 750, revenue: 3742.50 },
+            { name: 'Organic Spinach', category: 'Vegetables', price: 3.99, sold: 620, revenue: 2473.80 },
+            { name: 'Chicken Breast (1kg)', category: 'Meat', price: 8.99, sold: 580, revenue: 5214.20 }
+        ];
+
+        // Initialize charts when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sales Chart
+            const salesCtx = document.getElementById('salesChart').getContext('2d');
+            new Chart(salesCtx, {
+                type: 'line',
+                data: salesData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Category Chart
+            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+            new Chart(categoryCtx, {
+                type: 'doughnut',
+                data: categoryData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Populate recent orders
+            const recentOrdersTable = document.getElementById('recentOrders');
+            recentOrders.forEach(order => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${order.id}</td>
+                    <td>${order.customer}</td>
+                    <td>${order.date}</td>
+                    <td>$${order.amount.toFixed(2)}</td>
+                    <td><span class="badge bg-${getStatusBadgeClass(order.status)}">${order.status}</span></td>
+                `;
+                recentOrdersTable.appendChild(row);
+            });
+
+            // Populate top products
+            const topProductsTable = document.getElementById('topProducts');
+            topProducts.forEach(product => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${product.name}</td>
+                    <td>${product.category}</td>
+                    <td>$${product.price.toFixed(2)}</td>
+                    <td>${product.sold}</td>
+                    <td>$${product.revenue.toFixed(2)}</td>
+                `;
+                topProductsTable.appendChild(row);
+            });
+
+            // Logout button
+            document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                // Add logout logic here
+                alert('You have been logged out');
+                window.location.href = '/store.html';
+            });
+        });
+
+        function getStatusBadgeClass(status) {
+            switch(status.toLowerCase()) {
+                case 'completed':
+                    return 'success';
+                case 'processing':
+                    return 'primary';
+                case 'shipped':
+                    return 'info';
+                case 'pending':
+                    return 'warning';
+                default:
+                    return 'secondary';
+            }
+        }
+
+        // Period selector
+        document.getElementById('salesPeriod').addEventListener('change', function() {
+            // In a real app, this would fetch new data based on the selected period
+            console.log('Period changed to:', this.value);
+            // Here you would typically make an API call to get data for the selected period
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grocery Store - Shop</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .product-card {
+            transition: transform 0.2s;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        .cart-sidebar {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            position: sticky;
+            top: 20px;
+        }
+        .cart-item {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            text-align: center;
+        }
+        .product-image {
+            height: 180px;
+            object-fit: cover;
+            width: 100%;
+            background-color: #f5f5f5;
+        }
+        .product-card .card-body {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .product-grid {
+            row-gap: 24px;
+        }
+        .pagination {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success mb-4">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="/images/logo.png" alt="Logo" style="height: 50px; margin-right: 12px;">
+                Grocery Store
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/index.html">Admin</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/store.html">Shop</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center mt-4">
+                    <!-- Cart Button -->
+                    <button class="btn btn-outline-light position-relative" type="button" data-bs-toggle="offcanvas" data-bs-target="#cartSidebar">
+                        <i class="bi bi-cart3"></i> Cart
+                        <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            0
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <!-- Product Grid -->
+            <div class="col-lg-9">
+                <div class="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-3">
+                    <h2 class="mb-0">Our Products</h2>
+                    <div class="d-flex gap-2">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search products...">
+                        <button class="btn btn-primary" id="searchBtn" type="button">Search</button>
+                        <button class="btn btn-secondary" id="clearSearchBtn" type="button">Clear</button>
+                    </div>
+                </div>
+                <div class="row product-grid" id="products-container">
+                    <!-- Products will be loaded here -->
+                    <div class="col-12 text-center my-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p>Loading products...</p>
+                    </div>
+                </div>
+                <nav aria-label="Product pagination" class="mt-4">
+                    <ul class="pagination justify-content-center" id="pagination"></ul>
+                </nav>
+            </div>
+
+            <!-- Cart Sidebar -->
+            <div class="col-lg-3">
+                <div class="cart-sidebar">
+                    <h4 class="mb-4">Your Cart</h4>
+                    <div id="cart-items">
+                        <p class="text-muted">Your cart is empty</p>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <h5>Total:</h5>
+                        <h5 id="cart-total">$0.00</h5>
+                    </div>
+                    <button id="checkout-btn" class="btn btn-success w-100" disabled>
+                        Proceed to Checkout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar Offcanvas -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartSidebar">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Your Shopping Cart</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div id="offcanvas-cart-items">
+                <p class="text-muted">Your cart is empty</p>
+            </div>
+            <div class="position-absolute bottom-0 start-0 w-100 p-3 border-top bg-white">
+                <div class="d-flex justify-content-between mb-3">
+                    <h5>Total:</h5>
+                    <h5 id="offcanvas-cart-total">$0.00</h5>
+                </div>
+                <button id="offcanvas-checkout-btn" class="btn btn-success w-100" disabled>
+                    Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="checkoutModalLabel">Checkout Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="checkout-form" novalidate>
+                        <div class="mb-3">
+                            <label for="customerName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="customerName" name="customerName" placeholder="John Doe" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="customerEmail" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="customerEmail" name="customerEmail" placeholder="your.email@example.com" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phoneNumber" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="555-123-4567" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <textarea class="form-control" id="address" name="address" rows="3" placeholder="123 Main St, Springfield" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="paymentMethod" class="form-label">Payment Method</label>
+                            <select class="form-select" id="paymentMethod" name="paymentMethod" required>
+                                <option value="" selected disabled>Select payment method</option>
+                                <option value="Cash on Delivery">Cash on Delivery</option>
+                                <option value="Credit Card">Credit Card</option>
+                                <option value="Debit Card">Debit Card</option>
+                                <option value="UPI">UPI</option>
+                                <option value="Net Banking">Net Banking</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="checkoutNotes" class="form-label">Notes (optional)</label>
+                            <textarea class="form-control" id="checkoutNotes" name="notes" rows="2" placeholder="Any delivery instructions?"></textarea>
+                        </div>
+                        <div class="alert alert-info d-flex justify-content-between" role="status">
+                            <span>Items:</span>
+                            <strong id="checkoutItemCount">0</strong>
+                        </div>
+                        <div class="alert alert-success d-flex justify-content-between" role="status">
+                            <span>Total Amount:</span>
+                            <strong id="checkoutTotalAmount">$0.00</strong>
+                        </div>
+                        <div class="alert alert-danger d-none" id="checkoutError"></div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="confirmCheckoutBtn">Confirm Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto toast-title">Notification</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize the store page
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Store page loaded');
+            
+            // Show the user navigation by default
+            const userNav = document.getElementById('user-nav');
+            const loginNav = document.getElementById('login-nav');
+            if (userNav) userNav.style.display = 'block';
+            if (loginNav) loginNav.style.display = 'none';
+            
+            // Set a default username
+            const usernameElement = document.getElementById('username-display');
+            if (usernameElement) {
+                usernameElement.textContent = 'Guest';
+            }
+        });
+
+        // Cart state
+        let cart = [];
+        let products = [];
+        let currentPage = 1;
+        let totalPages = 1;
+        const pageSize = 9;
+        let currentSearch = '';
+        let productQuantities = {}; // Track available quantities
+        const toastElement = document.getElementById('toast');
+        const toast = new bootstrap.Toast(toastElement);
+        
+        function showToast(message, type = 'success') {
+            const toastTitle = toastElement.querySelector('.toast-title');
+            const toastBody = toastElement.querySelector('.toast-body');
+            
+            // Set message
+            toastBody.textContent = message;
+            
+            // Set type (color)
+            const toastClass = {
+                'success': 'bg-success text-white',
+                'warning': 'bg-warning',
+                'danger': 'bg-danger text-white',
+                'info': 'bg-info',
+            }[type] || '';
+            
+            // Update classes
+            toastElement.className = `toast ${toastClass}`;
+            
+            // Show the toast
+            toast.show();
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                toast.hide();
+            }, 3000);
+        }
+
+        // DOM Elements
+        const productsContainer = document.getElementById('products-container');
+        const cartItems = document.getElementById('cart-items');
+        const offcanvasCartItems = document.getElementById('offcanvas-cart-items');
+        const cartCount = document.getElementById('cartCount');
+        const cartTotal = document.getElementById('cart-total');
+        const offcanvasCartTotal = document.getElementById('offcanvas-cart-total');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        const offcanvasCheckoutBtn = document.getElementById('offcanvas-checkout-btn');
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const clearSearchBtn = document.getElementById('clearSearchBtn');
+        const paginationEl = document.getElementById('pagination');
+        const checkoutModalElement = document.getElementById('checkoutModal');
+        const checkoutModal = new bootstrap.Modal(checkoutModalElement);
+        const checkoutForm = document.getElementById('checkout-form');
+        const checkoutError = document.getElementById('checkoutError');
+        const checkoutItemCount = document.getElementById('checkoutItemCount');
+        const checkoutTotalAmount = document.getElementById('checkoutTotalAmount');
+        const confirmCheckoutBtn = document.getElementById('confirmCheckoutBtn');
+        const customerNameInput = document.getElementById('customerName');
+        const customerEmailInput = document.getElementById('customerEmail');
+        const phoneNumberInput = document.getElementById('phoneNumber');
+        const addressInput = document.getElementById('address');
+        const paymentMethodSelect = document.getElementById('paymentMethod');
+        const notesInput = document.getElementById('checkoutNotes');
+        const baseApiUrl = window.location.origin;
+        const API_URL = '/api/v1/products';
+        const placeholderImage = 'https://via.placeholder.com/300x200?text=No+Image';
+
+
+        // Load products
+        async function loadProducts(page = 1) {
+            try {
+                console.log('Fetching products from /api/v1/products');
+                const params = new URLSearchParams({
+                    page: page - 1,
+                    size: pageSize,
+                });
+
+                if (currentSearch) {
+                    params.append('name', currentSearch);
+                }
+
+                const response = await fetch(`/api/v1/products?${params.toString()}`);
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+                }
+                
+                const data = await response.json();
+                console.log('Raw products response:', data);
+
+                // Handle paginated or raw array responses
+                products = Array.isArray(data)
+                    ? data
+                    : (Array.isArray(data.products) ? data.products : []);
+                totalPages = Array.isArray(data) ? 1 : (data.totalPages || 1);
+                currentPage = Array.isArray(data) ? 1 : ((typeof data.currentPage === 'number' ? data.currentPage : 0) + 1);
+
+                if (!Array.isArray(products)) {
+                    throw new Error('Unexpected response format from products API');
+                }
+
+                console.log('Products loaded:', products);
+
+                // Initialize available quantities
+                productQuantities = {};
+                products.forEach(product => {
+                    productQuantities[product.id] = product.quantity;
+                });
+                
+                displayProducts(products);
+                updatePagination();
+            } catch (error) {
+                console.error('Error loading products:', error);
+                const errorMessage = error.message.includes('Failed to fetch') 
+                    ? 'Failed to connect to the server. Please check your connection.'
+                    : `Error loading products: ${error.message}`;
+                    
+                productsContainer.innerHTML = `
+                    <div class="col-12 text-center my-5">
+                        <div class="alert alert-danger">
+                            ${errorMessage}
+                            <div class="mt-2">
+                                <button class="btn btn-sm btn-outline-secondary" onclick="loadProducts()">
+                                    Retry
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Display products
+        function displayProducts(productsList) {
+            if (!Array.isArray(productsList) || productsList.length === 0) {
+                productsContainer.innerHTML = `
+                    <div class="col-12 text-center my-5">
+                        <p class="text-muted">No products available</p>
+                    </div>
+                `;
+                paginationEl.innerHTML = '';
+                return;
+            }
+
+            productsContainer.innerHTML = productsList.map(product => {
+                console.log('Full product structure:', JSON.stringify(product, null, 2)); // Debug log
+                
+                // Handle the image URL from the ProductDto
+                let imageUrl = '';
+                let hasValidImage = false;
+                
+                // First, try to get the image from the image object (new structure)
+                if (product.image && product.image.url) {
+                    imageUrl = product.image.url;
+                    hasValidImage = true;
+                    console.log('Using product.image.url:', imageUrl);
+                }
+                // Fallback to the direct imageUrl (backward compatibility)
+                else if (product.imageUrl) {
+                    imageUrl = product.imageUrl;
+                    hasValidImage = true;
+                    console.log('Using product.imageUrl:', imageUrl);
+                }
+                
+                // Ensure the URL is properly formatted
+                let resolvedImageUrl = '';
+                if (hasValidImage) {
+                    // Ensure the URL is absolute
+                    if (!imageUrl.startsWith('http') && !imageUrl.startsWith('data:image')) {
+                        if (!imageUrl.startsWith('/')) {
+                            imageUrl = `/${imageUrl}`;
+                        }
+                        imageUrl = baseApiUrl + imageUrl;
+                    }
+                    resolvedImageUrl = imageUrl;
+                } else {
+                    // Use SVG placeholder if no image found
+                    const productName = product.name || 'Product';
+                    const firstLetter = productName.charAt(0).toUpperCase();
+                    const bgColor = `#${Math.floor(Math.random()*16777215).toString(16)}`;
+                    resolvedImageUrl = `data:image/svg+xml;utf8,<svg width='300' height='200' xmlns='http://www.w3.org/2000/svg'><rect width='100%' height='100%' fill='${bgColor.replace('#', '%23')}'/><text x='50%' y='50%' font-size='60' text-anchor='middle' dominant-baseline='middle' fill='white'>${firstLetter}</text></svg>`;
+                }
+                
+                console.log('Final image URL for product', product.id, ':', resolvedImageUrl);
+
+                return `
+                <div class="col-md-4 col-sm-6">
+                    <div class="card product-card h-100" data-product-id="${product.id}">
+                        <img src="${resolvedImageUrl}" 
+                             class="card-img-top product-image" 
+                             alt="${product.name}" 
+                             loading="lazy"
+                             onerror="this.onerror=null;
+                                     const name = '${product.name || 'Product'}'.replace(/'/g, '\\'');
+                                     const letter = name.charAt(0).toUpperCase();
+                                     const color = '#' + Math.floor(Math.random()*16777215).toString(16);
+                                     this.src = 'data:image/svg+xml;utf8,' + 
+                                       '<svg width=\'300\' height=\'200\' xmlns=\'http://www.w3.org/2000/svg\'>' +
+                                       '<rect width=\'100%\' height=\'100%\' fill=\'' + color + '\'/>' +
+                                       '<text x=\'50%\' y=\'50%\' font-size=\'60\' text-anchor=\'middle\' ' +
+                                       'dominant-baseline=\'middle\' fill=\'white\'>' + letter + '</text></svg>';">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">${product.name}</h5>
+                            <p class="card-text text-muted">${product.description || 'No description available'}</p>
+                            <div class="mt-auto">
+                                <p class="h5 text-success mb-2">$${parseFloat(product.price).toFixed(2)}</p>
+                                <p class="text-muted small mb-2 available-quantity">Available: ${product.quantity}</p>
+                                <button class="btn btn-primary w-100 add-to-cart" 
+                                        data-id="${product.id}"
+                                        data-name="${product.name}"
+                                        data-price="${product.price}"
+                                        data-quantity="${product.quantity}"
+                                        ${product.quantity <= 0 ? 'disabled' : ''}>
+                                    ${product.quantity > 0 ? 'Add to Cart' : 'Out of Stock'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+
+            // Add event listeners to all add to cart buttons
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', addToCart);
+            });
+        }
+
+        function updatePagination() {
+            if (!paginationEl) return;
+
+            if (totalPages <= 1) {
+                paginationEl.innerHTML = '';
+                return;
+            }
+
+            const maxVisible = 5;
+            let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+            let end = start + maxVisible - 1;
+
+            if (end > totalPages) {
+                end = totalPages;
+                start = Math.max(1, end - maxVisible + 1);
+            }
+
+            let html = '';
+            html += `
+                <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="changePage(${currentPage - 1}); return false;">Previous</a>
+                </li>`;
+
+            for (let i = start; i <= end; i++) {
+                html += `
+                <li class="page-item ${i === currentPage ? 'active' : ''}">
+                    <a class="page-link" href="#" onclick="changePage(${i}); return false;">${i}</a>
+                </li>`;
+            }
+
+            html += `
+                <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="changePage(${currentPage + 1}); return false;">Next</a>
+                </li>`;
+
+            paginationEl.innerHTML = html;
+        }
+
+        function changePage(page) {
+            if (page < 1 || page > totalPages || page === currentPage) {
+                return;
+            }
+            loadProducts(page);
+        }
+
+        // Add to cart
+        function addToCart(event) {
+            const button = event.target;
+            const id = button.dataset.id;
+            const name = button.dataset.name;
+            const price = parseFloat(button.dataset.price);
+            
+            // Check if item is already in cart
+            // Check if we can add more of this item
+            const availableQty = productQuantities[id] || 0;
+            const existingItem = cart.find(item => item.id === id);
+            const currentQty = existingItem ? existingItem.quantity : 0;
+            
+            if (currentQty >= availableQty) {
+                showToast('Not enough stock available', 'warning');
+                return;
+            }
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id,
+                    name,
+                    price,
+                    quantity: 1
+                });
+            }
+            
+            // Update UI
+            updateCart();
+            
+            showToast(`${name} added to cart!`, 'success');
+        }
+
+        // Remove item from cart
+        function removeFromCart(id) {
+            const itemIndex = cart.findIndex(item => item.id === id);
+            if (itemIndex > -1) {
+                const item = cart[itemIndex];
+                // Always remove the item completely when clicking remove
+                cart.splice(itemIndex, 1);
+                updateCart();
+                showToast('Item removed from cart', 'info');
+            }
+        }
+
+        // Update cart UI
+        function updateCart() {
+            // Update cart count
+            const itemCount = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = itemCount;
+            
+            // Calculate total
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            cartTotal.textContent = `$${total.toFixed(2)}`;
+            offcanvasCartTotal.textContent = `$${total.toFixed(2)}`;
+            
+            // Update cart items
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p class="text-muted">Your cart is empty</p>';
+                offcanvasCartItems.innerHTML = '<p class="text-muted">Your cart is empty</p>';
+                checkoutBtn.disabled = true;
+                offcanvasCheckoutBtn.disabled = true;
+                return;
+            }
+            
+            // Enable checkout buttons
+            checkoutBtn.disabled = false;
+            offcanvasCheckoutBtn.disabled = false;
+            
+            // Update cart items list with quantity controls
+            cartItems.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="mb-1">${item.name}</h6>
+                            <div class="d-flex align-items-center mt-2">
+                                <button class="btn btn-sm btn-outline-secondary quantity-btn decrease-quantity" 
+                                        data-id="${item.id}" 
+                                        title="Decrease quantity">
+                                    <i class="bi bi-dash"></i>
+                                </button>
+                                <span class="mx-2" style="min-width: 30px; text-align: center;">${item.quantity}</span>
+                                <button class="btn btn-sm btn-outline-primary quantity-btn increase-quantity" 
+                                        data-id="${item.id}" 
+                                        title="Increase quantity">
+                                    <i class="bi bi-plus"></i>
+                                </button>
+                                <span class="ms-3 text-muted">$${item.price.toFixed(2)} each</span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mt-4">
+                            <button class="btn btn-sm btn-outline-danger remove-item" 
+                                    data-id="${item.id}" 
+                                    title="Remove item">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                            <span class="ms-3 fw-bold">$${(item.price * item.quantity).toFixed(2)}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Copy to offcanvas cart
+            offcanvasCartItems.innerHTML = cartItems.innerHTML;
+            
+            // Add event listeners
+            document.querySelectorAll('.decrease-quantity').forEach(button => {
+                button.addEventListener('click', updateQuantity);
+            });
+            
+            document.querySelectorAll('.increase-quantity').forEach(button => {
+                button.addEventListener('click', updateQuantity);
+            });
+            
+            // Use event delegation for remove buttons
+            document.addEventListener('click', function(event) {
+                const removeBtn = event.target.closest('.remove-item');
+                if (removeBtn) {
+                    event.preventDefault();
+                    const id = removeBtn.dataset.id;
+                    cart = cart.filter(item => item.id !== id);
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    updateCart();
+                    showToast('Item removed from cart', 'info');
+                }
+            });
+        }
+        
+        // Update item quantity
+        function updateQuantity(event) {
+            event.preventDefault();
+            const button = event.currentTarget;
+            const id = button.closest('[data-id]').dataset.id;
+            const item = cart.find(item => item.id === id);
+            
+            if (!item) return;
+            
+            // Determine if we're increasing or decreasing
+            const isIncrease = button.classList.contains('increase-quantity');
+            
+            if (isIncrease) {
+                item.quantity += 1;
+            } else {
+                // Don't allow quantity to go below 1 (use remove instead)
+                if (item.quantity <= 1) {
+                    removeItem(event);
+                    return;
+                }
+                item.quantity -= 1;
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            // Update the UI
+            updateCart();
+            
+            // Show feedback
+            showToast(`Updated ${item.name} quantity to ${item.quantity}`, 'success');
+            
+            updateCart();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            searchBtn.addEventListener('click', () => {
+                currentSearch = searchInput.value.trim();
+                loadProducts(1);
+            });
+
+            clearSearchBtn.addEventListener('click', () => {
+                currentSearch = '';
+                searchInput.value = '';
+                loadProducts(1);
+            });
+
+            searchInput.addEventListener('keyup', (event) => {
+                if (event.key === 'Enter') {
+                    currentSearch = searchInput.value.trim();
+                    loadProducts(1);
+                }
+            });
+
+            loadProducts();
+        });
+
+        // Remove item function is now handled by event delegation above
+        
+        // Checkout
+        function checkout() {
+            if (cart.length === 0) {
+                showToast('Your cart is empty. Add items before checking out.', 'warning');
+                return;
+            }
+
+            const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            checkoutItemCount.textContent = itemCount;
+            checkoutTotalAmount.textContent = `$${totalAmount.toFixed(2)}`;
+            checkoutError.classList.add('d-none');
+            checkoutError.textContent = '';
+            checkoutForm.classList.remove('was-validated');
+            confirmCheckoutBtn.disabled = false;
+            confirmCheckoutBtn.textContent = 'Confirm Order';
+
+            checkoutModal.show();
+        }
+
+        function submitCheckout() {
+            if (cart.length === 0) {
+                showToast('Your cart is empty. Add items before checking out.', 'warning');
+                checkoutModal.hide();
+                return;
+            }
+
+            const requiredFields = [customerNameInput, phoneNumberInput, addressInput, paymentMethodSelect];
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value || !field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+
+            if (!isValid) {
+                checkoutForm.classList.add('was-validated');
+                checkoutError.textContent = 'Please fill in all required fields.';
+                checkoutError.classList.remove('d-none');
+                return;
+            }
+
+            checkoutError.classList.add('d-none');
+            checkoutForm.classList.remove('was-validated');
+
+            const orderItems = cart.map(item => ({
+                productId: parseInt(item.id),
+                quantity: item.quantity
+            }));
+
+            const payload = {
+                customerName: customerNameInput.value.trim(),
+                customerEmail: customerEmailInput.value.trim(),
+                phoneNumber: phoneNumberInput.value.trim(),
+                address: addressInput.value.trim(),
+                paymentMethod: paymentMethodSelect.value,
+                notes: notesInput.value ? notesInput.value.trim() : null,
+                items: orderItems
+            };
+
+            confirmCheckoutBtn.disabled = true;
+            confirmCheckoutBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Placing order...';
+
+            fetch('/api/v1/checkout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify(payload)
+            })
+            .then(async response => {
+                const responseData = await response.text();
+
+                if (!response.ok) {
+                    let errorMsg = 'Checkout failed';
+                    try {
+                        const errorData = responseData ? JSON.parse(responseData) : {};
+                        errorMsg = errorData.message || errorMsg;
+                    } catch (e) {
+                        console.error('Error parsing error response:', e);
+                    }
+                    throw new Error(errorMsg);
+                }
+
+                try {
+                    return responseData ? JSON.parse(responseData) : {};
+                } catch (e) {
+                    console.error('Error parsing success response:', e);
+                    return {};
+                }
+            })
+            .then(data => {
+                cart.forEach(item => {
+                    if (productQuantities[item.id] !== undefined) {
+                        productQuantities[item.id] -= item.quantity;
+                    }
+                    const productElement = document.querySelector(`.product-card[data-product-id="${item.id}"]`);
+                    if (productElement) {
+                        const addButton = productElement.querySelector('.add-to-cart');
+                        const availableQty = productQuantities[item.id] || 0;
+                        const availableQtyElement = productElement.querySelector('.available-quantity');
+
+                        if (availableQtyElement) {
+                            availableQtyElement.textContent = `Available: ${availableQty}`;
+                        }
+
+                        if (availableQty <= 0) {
+                            addButton.disabled = true;
+                            addButton.textContent = 'Out of Stock';
+                        } else if (addButton) {
+                            addButton.disabled = false;
+                            addButton.textContent = 'Add to Cart';
+                        }
+                    }
+                });
+
+                cart = [];
+                updateCart();
+
+                checkoutModal.hide();
+
+                const orderId = data?.orderId ? ` Order #${data.orderId}` : '';
+                showToast(`Order placed successfully!${orderId}`, 'success');
+
+                const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('cartSidebar'));
+                if (offcanvas) {
+                    offcanvas.hide();
+                }
+
+                checkoutForm.reset();
+            })
+            .catch(error => {
+                console.error('Checkout error:', error);
+                checkoutError.textContent = error.message || 'Failed to process order.';
+                checkoutError.classList.remove('d-none');
+                confirmCheckoutBtn.disabled = false;
+                confirmCheckoutBtn.textContent = 'Confirm Order';
+            });
+        }
+        
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            searchBtn.addEventListener('click', () => {
+                currentSearch = searchInput.value.trim();
+                loadProducts(1);
+            });
+
+            clearSearchBtn.addEventListener('click', () => {
+                currentSearch = '';
+                searchInput.value = '';
+                loadProducts(1);
+            });
+
+            searchInput.addEventListener('keyup', (event) => {
+                if (event.key === 'Enter') {
+                    currentSearch = searchInput.value.trim();
+                    loadProducts(1);
+                }
+            });
+
+            loadProducts();
+            
+            checkoutBtn.addEventListener('click', checkout);
+            offcanvasCheckoutBtn.addEventListener('click', checkout);
+            confirmCheckoutBtn.addEventListener('click', submitCheckout);
+
+            checkoutModalElement.addEventListener('hidden.bs.modal', () => {
+                confirmCheckoutBtn.disabled = false;
+                confirmCheckoutBtn.textContent = 'Confirm Order';
+                checkoutError.classList.add('d-none');
+                checkoutForm.classList.remove('was-validated');
+                requiredFields.forEach(field => field.classList.remove('is-invalid'));
+            });
+        });
+    </script>
+</body>
+</html>
