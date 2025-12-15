@@ -2,6 +2,7 @@ package com.grocerystore.grocery_store.controller
 
 import com.grocerystore.grocery_store.dto.ProductDto
 import com.grocerystore.grocery_store.model.Product
+import com.grocerystore.grocery_store.model.ProductImage
 import com.grocerystore.grocery_store.service.ProductService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -23,8 +24,8 @@ class ProductController {
     @PostMapping
     ResponseEntity<?> create(@RequestBody Product product) {
         try {
-            if (!product.name || product.price == null || product.stock == null) {
-                return new ResponseEntity<>([error: 'Name, price, and stock are required'], HttpStatus.BAD_REQUEST)
+            if (!product.name || product.price == null || product.quantity == null) {
+                return new ResponseEntity<>([error: 'Name, price, and quantity are required'], HttpStatus.BAD_REQUEST)
             }
             def created = productService.create(product)
             return new ResponseEntity<>(ProductDto.from(created), HttpStatus.CREATED)
@@ -73,18 +74,55 @@ class ProductController {
     @PutMapping("/{id}")
     ResponseEntity<?> updateProduct(
             @PathVariable Long id,
-            @RequestBody Map<String, Object> updates
+            @RequestBody Map updates
     ) {
         try {
-            if (updates.name == "" || (updates.price != null && updates.price < 0) || (updates.stock != null && updates.stock < 0)) {
-                return new ResponseEntity<>([error: 'Invalid product data'], HttpStatus.BAD_REQUEST)
+            // Remove imageUrl from updates if it exists since it's read-only
+            String imageUrl = updates.remove('imageUrl')
+
+            // If imageUrl was provided, extract the image ID and update the product's image
+            if (imageUrl) {
+                try {
+                    // Extract the image ID from the URL (assuming format: /api/v1/images/75)
+                    Long imageId = imageUrl.split('/').last() as Long
+                    ProductImage image = productService.findImageById(imageId)
+
+                    if (image == null) {
+                        return new ResponseEntity<>([error: "Image with ID ${imageId} not found"], HttpStatus.NOT_FOUND)
+                    }
+
+                    // Set the image on the product
+                    def product = productService.findById(id)
+                    product.image = image
+                    productService.save(product)
+                } catch (NumberFormatException e) {
+                    return new ResponseEntity<>([error: "Invalid image URL format"], HttpStatus.BAD_REQUEST)
+                } catch (Exception e) {
+                    return new ResponseEntity<>([error: "Error updating product image: ${e.message}"], HttpStatus.INTERNAL_SERVER_ERROR)
+                }
             }
-            def updatedProduct = productService.updateProduct(id, updates)
+
+            // Update other product properties
+            if (!updates.isEmpty()) {
+                try {
+                    def product = productService.findById(id)
+                    updates.each { key, value ->
+                        if (value != null && key != 'id') { // Prevent changing the ID
+                            product[key] = value
+                        }
+                    }
+                    productService.save(product)
+                } catch (Exception e) {
+                    return new ResponseEntity<>([error: "Error updating product: ${e.message}"], HttpStatus.BAD_REQUEST)
+                }
+            }
+
+            def updatedProduct = productService.findById(id)
             return new ResponseEntity<>(ProductDto.from(updatedProduct), HttpStatus.OK)
         } catch (NoSuchElementException e) {
-            return new ResponseEntity<>([error: 'Product not found'], HttpStatus.NOT_FOUND)
+            return new ResponseEntity<>([error: "Product not found: ${e.message}"], HttpStatus.NOT_FOUND)
         } catch (Exception e) {
-            return new ResponseEntity<>([error: e.message ?: 'Failed to update product'], HttpStatus.BAD_REQUEST)
+            return new ResponseEntity<>([error: "Failed to update product: ${e.message}"], HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 

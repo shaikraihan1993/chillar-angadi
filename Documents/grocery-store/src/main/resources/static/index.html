@@ -687,29 +687,10 @@
     products.forEach(product => {
       const tr = document.createElement("tr");
 
-      // Handle both old (images array) and new (single image) formats
-      let imageUrl = '';
-      let imageId = '';
-      let hasImage = false;
-
-      // Check new format first (product.image)
-      if (product.image) {
-        hasImage = true;
-        imageUrl = product.image.imageUrl || `/api/v1/images/${product.image.id}`;
-        imageId = product.image.id;
-      }
-      // Fall back to old format (product.images array)
-      else if (product.images && product.images.length > 0) {
-        hasImage = true;
-        const firstImage = product.images[0];
-        imageUrl = firstImage.imageUrl || `/api/v1/images/${firstImage.id}`;
-        imageId = firstImage.id;
-      }
-      // Fall back to mainImageUrl if available
-      else if (product.mainImageUrl) {
-        hasImage = true;
-        imageUrl = product.mainImageUrl;
-      }
+      // Handle image using the new imageId approach
+      let imageId = product.imageId || (product.image ? product.image.id : '');
+      let hasImage = !!imageId;
+      let imageUrl = hasImage ? `/api/v1/images/${imageId}` : '';
 
       const quantityValue = product.quantity != null ? product.quantity : 0;
 
@@ -791,18 +772,40 @@
     editingId = id;
     const formTitle = document.getElementById("form-title");
     const nameEl = document.getElementById("name");
-    const descEl = document.getElementById("description");
+    const descriptionEl = document.getElementById("description");
     const priceEl = document.getElementById("price");
-    const qtyEl = document.getElementById("quantity");
-    const preview = document.getElementById('preview');
-    const imagePreview = document.getElementById('image-preview');
-    const imageIdEl = document.getElementById('imageId');
+    const quantityEl = document.getElementById("quantity");
+    const imagePreview = document.getElementById("image-preview");
+    const preview = document.getElementById("preview");
+    const imageIdEl = document.getElementById("image-id");
+    const uploadButton = document.querySelector("button[type='submit']");
+    const form = document.getElementById("product-form");
+    const imageContainer = document.getElementById("image-container");
 
-    if (formTitle) formTitle.textContent = "Edit Product (ID " + id + ")";
-    if (nameEl) nameEl.value = name;
-    if (descEl) descEl.value = description;
-    if (priceEl) priceEl.value = price;
-    if (qtyEl) qtyEl.value = quantity;
+    // Update form title and button text
+    formTitle.textContent = "Edit Product";
+    uploadButton.textContent = "Update Product";
+
+    // Set form values
+    nameEl.value = name || '';
+    descriptionEl.value = description || '';
+    priceEl.value = price || '';
+    quantityEl.value = quantity || '';
+    
+    // Handle image preview using imageId
+    if (imageId) {
+      imageIdEl.value = imageId;
+      if (preview) {
+        preview.src = `/api/v1/images/${imageId}`;
+        imagePreview.style.display = 'block';
+      }
+    } else {
+      if (preview) {
+        preview.src = '';
+        imagePreview.style.display = 'none';
+      }
+      if (imageIdEl) imageIdEl.value = '';
+    }
 
     if (preview) preview.src = '';
     if (imagePreview) imagePreview.style.display = 'none';

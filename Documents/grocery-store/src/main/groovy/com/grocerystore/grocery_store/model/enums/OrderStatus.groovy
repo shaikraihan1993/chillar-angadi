@@ -1,4 +1,4 @@
-package com.grocerystore.grocery_store.model
+package com.grocerystore.grocery_store.model.enums
 
 enum OrderStatus {
     PENDING,

@@ -22,7 +22,15 @@ class ProductService {
     }
 
 
+    @Transactional
     Product create(Product product) {
+        // If imageId is set, fetch and associate the ProductImage
+        if (product.imageId) {
+            ProductImage image = findImageById(product.imageId)
+            if (image) {
+                product.image = image
+            }
+        }
         productRepository.save(product)
     }
 
@@ -95,23 +103,38 @@ class ProductService {
     }
     
     /**
-     * Update a product
+     * Update a product with the given updates
      * @param id The ID of the product to update
-     * @param product The updated product data
+     * @param updates Map containing the fields to update
      * @return The updated product
      */
     @Transactional
-    Product update(Long id, Product product) {
+    Product updateProduct(Long id, Map<String, Object> updates) {
         Product existing = findById(id)
-        existing.name = product.name
-        existing.description = product.description
-        existing.price = product.price
-        existing.quantity = product.quantity
         
-        // Preserve the existing image if one exists and no new image is being set
-        if (existing.image != null && (product.image == null || product.image.id == null)) {
-            product.image = existing.image
+        // Only update fields that are present in the updates map
+        if (updates.name != null) {
+            existing.name = updates.name
         }
+        if (updates.description != null) {
+            existing.description = updates.description
+        }
+        if (updates.price != null) {
+            existing.price = new BigDecimal(updates.price.toString())
+        }
+        if (updates.quantity != null) {
+            existing.quantity = updates.quantity as Integer
+        }
+        
+        // Handle image update if imageId is provided
+        if (updates.imageId != null) {
+            def imageId = updates.imageId as Long
+            def image = productRepository.findImageById(imageId)
+                .orElseThrow { new NoSuchElementException("Image with ID ${imageId} not found") }
+            existing.image = image
+        }
+        
+        return save(existing)
         
         return productRepository.save(product)
     }

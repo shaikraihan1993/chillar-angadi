@@ -4,14 +4,13 @@ import com.grocerystore.grocery_store.dto.CheckoutRequest
 import com.grocerystore.grocery_store.exception.InsufficientStockException
 import com.grocerystore.grocery_store.model.Order
 import com.grocerystore.grocery_store.model.OrderItem
-import com.grocerystore.grocery_store.model.OrderStatus
+import com.grocerystore.grocery_store.model.enums.OrderStatus
 import com.grocerystore.grocery_store.model.Product
 import com.grocerystore.grocery_store.repository.OrderRepository
 import com.grocerystore.grocery_store.repository.ProductRepository
 import groovy.util.logging.Slf4j
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.math.BigDecimal
 
 @Slf4j
 @Service

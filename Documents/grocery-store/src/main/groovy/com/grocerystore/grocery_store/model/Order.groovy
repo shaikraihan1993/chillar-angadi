@@ -2,8 +2,9 @@ package com.grocerystore.grocery_store.model
 
 import com.fasterxml.jackson.annotation.JsonBackReference
 import com.fasterxml.jackson.annotation.JsonManagedReference
+import com.grocerystore.grocery_store.model.enums.OrderStatus
 import jakarta.persistence.*
-import java.math.BigDecimal
+
 import java.time.Instant
 
 @Entity

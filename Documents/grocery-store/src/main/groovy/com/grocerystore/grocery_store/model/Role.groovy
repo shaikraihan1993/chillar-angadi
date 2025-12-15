@@ -1,5 +1,6 @@
 package com.grocerystore.grocery_store.model
 
+import com.grocerystore.grocery_store.model.enums.ERole
 import jakarta.persistence.*
 
 @Entity

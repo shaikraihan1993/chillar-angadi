@@ -37,9 +37,9 @@ class FileUploadController {
 
             // Save the image
             def newImage = productImageRepository.save(new ProductImage(
-                fileName: file.originalFilename,
-                fileType: file.contentType,
-                data: file.bytes
+                    fileName: file.originalFilename,
+                    fileType: file.contentType,
+                    data: file.bytes
             ))
 
             // If productId is provided, link the image to the product
@@ -55,7 +55,13 @@ class FileUploadController {
                 }
             }
 
-            return ResponseEntity.ok([id: newImage.id.toString()])
+            // Return both ID and the full URL
+            def imageUrl = "/api/v1/images/${newImage.id}"
+            // Explicitly convert values to String to avoid GString serialization issues
+            return ResponseEntity.ok([
+                    'id' : newImage.id.toString(),
+                    'url': imageUrl as String
+            ])
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -80,9 +86,9 @@ class FileUploadController {
                 }
 
                 ResponseEntity.ok()
-                    .contentType(mediaType)
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"${image.fileName ?: 'image'}\"")
-                    .body(new ByteArrayResource(image.data))
+                        .contentType(mediaType)
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"${image.fileName ?: 'image'}\"")
+                        .body(new ByteArrayResource(image.data))
             }.orElse(ResponseEntity.notFound().build())
 
         } catch (Exception e) {

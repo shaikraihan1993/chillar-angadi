@@ -8,7 +8,13 @@ class ProductDto {
     String description
     BigDecimal price
     Integer quantity
-    String imageUrl
+    String brand
+    String manufacturer
+    String category
+    String subCategory
+    String unit
+    Boolean isActive
+    Long imageId
     
     static ProductDto from(Product product) {
         if (!product) return null
@@ -19,7 +25,13 @@ class ProductDto {
             description: product.description,
             price: product.price,
             quantity: product.quantity,
-            imageUrl: product.mainImageUrl
+            brand: product.brand,
+            manufacturer: product.manufacturer,
+            category: product.category?.toString(),
+            subCategory: product.subCategory?.toString(),
+            unit: product.unit?.toString(),
+            isActive: product.isActive,
+            imageId: product.imageId
         )
     }
     

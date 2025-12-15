@@ -409,8 +409,14 @@
                 let imageUrl = '';
                 let hasValidImage = false;
                 
-                // First, try to get the image from the image object (new structure)
-                if (product.image && product.image.url) {
+                // First, try to get the image using imageId (current structure)
+                if (product.imageId) {
+                    imageUrl = `/api/v1/images/${product.imageId}`;
+                    hasValidImage = true;
+                    console.log('Using product.imageId:', imageUrl);
+                }
+                // Fallback to the image object (older structure)
+                else if (product.image && product.image.url) {
                     imageUrl = product.image.url;
                     hasValidImage = true;
                     console.log('Using product.image.url:', imageUrl);
