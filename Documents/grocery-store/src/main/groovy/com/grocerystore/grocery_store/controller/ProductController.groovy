@@ -38,13 +38,21 @@ class ProductController {
     ResponseEntity<Map<String, Object>> listProducts(
             @RequestParam(name = "name", required = false) String name,
             @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "10") int size
+            @RequestParam(name = "size", defaultValue = "10") int size,
+            @RequestParam(name = "categories", required = false) String categories,
+            @RequestParam(name = "brands", required = false) String brands,
+            @RequestParam(name = "inStockOnly", required = false, defaultValue = "false") boolean inStockOnly
     ) {
         try {
             Pageable pageable = PageRequest.of(page, size)
-            Page<Product> result = name ? 
-                productService.findByNameContaining(name, pageable) : 
-                productService.findAll(pageable)
+
+            // Parse filter lists
+            List<String> categoryList = categories ? categories.split(',').collect { it.trim() } : []
+            List<String> brandList = brands ? brands.split(',').collect { it.trim() } : []
+
+            Page<Product> result = productService.findWithFilters(
+                name, categoryList, brandList, inStockOnly, pageable
+            )
 
             def response = [
                 products: ProductDto.fromList(result.content),
@@ -52,10 +60,20 @@ class ProductController {
                 totalItems: result.totalElements,
                 totalPages: result.totalPages
             ]
-            
+
             new ResponseEntity<>(response, HttpStatus.OK)
         } catch (Exception e) {
             new ResponseEntity<>([error: e.message], HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    @GetMapping("/brands")
+    ResponseEntity<List<String>> getBrands() {
+        try {
+            List<String> brands = productService.findAllBrands()
+            new ResponseEntity<>(brands, HttpStatus.OK)
+        } catch (Exception e) {
+            new ResponseEntity<>([], HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 

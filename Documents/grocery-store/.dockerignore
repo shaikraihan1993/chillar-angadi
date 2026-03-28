@@ -1,0 +1,34 @@
+# Dockerfile - multi-stage build configuration
+Dockerfile
+
+# Docker Compose override files
+docker-compose.override.yml
+docker-compose.*.yml
+
+# Environment files with sensitive data
+.env
+.env.local
+.env.*.local
+
+# Build artifacts
+build/
+!gradle/wrapper/gradle-wrapper.jar
+.gradle/
+
+# Uploads directory (managed by volume)
+uploads/
+
+# IDE files
+.idea/
+*.iml
+*.iws
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+

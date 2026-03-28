@@ -11,13 +11,62 @@ A RESTful API for managing products in a grocery store, built with Spring Boot a
 - **Cache**: Redis
 - **API Documentation**: SpringDoc OpenAPI 2.3.0 (Swagger UI)
 - **Validation**: Jakarta Bean Validation
+- **Containerization**: Docker & Docker Compose
 
 ## 📋 Prerequisites
 
+### For Local Development
 - Java 17 or higher
 - MySQL 8.0 or higher
-- Redis 7.0 or higher (or Docker)
+- Redis 7.0 or higher
 - Gradle 8.0 or higher
+
+### For Docker Deployment (Recommended)
+- Docker 20.10 or higher
+- Docker Compose 2.0 or higher
+
+## 🐳 Docker Deployment (Recommended)
+
+The easiest way to run the application is using Docker:
+
+### Quick Start with Docker
+
+```bash
+# 1. Start all services (MySQL, Redis, and Application)
+docker-compose up -d
+
+# 2. View logs
+docker-compose logs -f
+
+# 3. Access the application
+# Application: http://localhost:8089
+# Swagger UI: http://localhost:8089/swagger-ui.html
+```
+
+### Using the Management Script
+
+```bash
+# Make the script executable (first time only)
+chmod +x docker.sh
+
+# Start the application
+./docker.sh start
+
+# View logs
+./docker.sh logs app
+
+# Stop the application
+./docker.sh stop
+
+# See all available commands
+./docker.sh help
+```
+
+For detailed Docker documentation, see [DOCKER.md](DOCKER.md).
+
+## 🔧 Local Development Setup
+
+If you prefer to run without Docker:
 
 ## 🐳 Running Redis with Docker
 

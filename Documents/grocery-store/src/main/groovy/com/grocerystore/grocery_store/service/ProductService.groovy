@@ -37,6 +37,26 @@ class ProductService {
     Page<Product> findAll(Pageable pageable) {
         productRepository.findAllWithImages(pageable)
     }
+
+    /**
+     * Find products with filters
+     */
+    Page<Product> findWithFilters(String name, List<String> categories, List<String> brands, boolean inStockOnly, Pageable pageable) {
+        return productRepository.findWithFilters(
+            name?.trim() ?: null,
+            categories?.isEmpty() ? null : categories,
+            brands?.isEmpty() ? null : brands,
+            inStockOnly,
+            pageable
+        )
+    }
+
+    /**
+     * Get all unique brands
+     */
+    List<String> findAllBrands() {
+        return productRepository.findAllBrands()
+    }
     
     /**
      * Search products by name with pagination

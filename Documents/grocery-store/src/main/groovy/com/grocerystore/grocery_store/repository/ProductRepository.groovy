@@ -36,4 +36,29 @@ interface ProductRepository extends JpaRepository<Product, Long> {
      */
     @EntityGraph(attributePaths = ["image"])
     Page<Product> findByNameContainingIgnoreCase(String name, Pageable pageable)
+
+    /**
+     * Get all unique brands sorted alphabetically
+     */
+    @Query("SELECT DISTINCT p.brand FROM Product p WHERE p.brand IS NOT NULL ORDER BY p.brand")
+    List<String> findAllBrands()
+
+    /**
+     * Find products with multiple filters
+     */
+    @EntityGraph(attributePaths = ["image"])
+    @Query("""
+        SELECT p FROM Product p
+        WHERE (:name IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%')))
+        AND (:categories IS NULL OR p.category IN :categories)
+        AND (:brands IS NULL OR p.brand IN :brands)
+        AND (:inStockOnly = false OR p.quantity > 0)
+    """)
+    Page<Product> findWithFilters(
+        @Param("name") String name,
+        @Param("categories") List<String> categories,
+        @Param("brands") List<String> brands,
+        @Param("inStockOnly") boolean inStockOnly,
+        Pageable pageable
+    )
 }

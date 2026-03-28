@@ -41,8 +41,20 @@ class CheckoutService {
             }
         }
 
+        if (!request.customerName) {
+            throw new IllegalArgumentException("Customer name is required")
+        }
+        if (!request.phoneNumber) {
+            throw new IllegalArgumentException("Phone number is required")
+        }
+        if (!request.address) {
+            throw new IllegalArgumentException("Address is required")
+        }
         if (!request.customerEmail) {
             throw new IllegalArgumentException("Customer email is required")
+        }
+        if (!request.paymentMethod) {
+            throw new IllegalArgumentException("Payment method is required")
         }
 
         Order order = new Order(

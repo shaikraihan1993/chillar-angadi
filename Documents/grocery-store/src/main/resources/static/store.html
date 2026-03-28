@@ -61,11 +61,69 @@
         .pagination {
             margin-bottom: 0;
         }
+        .cart-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 10px;
+        }
+        .cart-grid-item {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 0.85rem;
+        }
+        .cart-grid-item-name {
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+        .cart-grid-item-price {
+            color: #6c757d;
+            font-size: 0.72rem;
+        }
+        .cart-grid-item-total {
+            font-weight: 700;
+            color: #198754;
+            font-size: 0.8rem;
+        }
+        .cart-grid-qty {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .cart-grid-qty button {
+            width: 22px;
+            height: 22px;
+            padding: 0;
+            font-size: 0.75rem;
+            line-height: 1;
+        }
+        .cart-grid-qty span {
+            min-width: 18px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .cart-grid-remove {
+            width: 22px;
+            height: 22px;
+            padding: 0;
+            font-size: 0.7rem;
+            line-height: 1;
+        }
     </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success mb-4 sticky-top" style="z-index: 1030;">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="/">
                 <img src="/images/logo.png" alt="Logo" style="height: 50px; margin-right: 12px;">
@@ -84,22 +142,119 @@
                     </li>
                 </ul>
                 <div class="d-flex align-items-center mt-4">
-                    <!-- Cart Button -->
-                    <button class="btn btn-outline-light position-relative" type="button" data-bs-toggle="offcanvas" data-bs-target="#cartSidebar">
+                    <!-- Cart Indicator (no longer a button) -->
+                    <div class="btn btn-outline-light position-relative">
                         <i class="bi bi-cart3"></i> Cart
                         <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                             0
                         </span>
-                    </button>
+                    </div>
                 </div>
             </div>
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container-fluid px-4">
         <div class="row">
-            <!-- Product Grid -->
-            <div class="col-lg-9">
+            <!-- Filter Sidebar - Left -->
+            <div class="col-12 col-md-2 mb-4">
+                <div class="card sticky-top" style="top: 80px; max-height: calc(100vh - 100px); overflow-y: auto;">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">Filters</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Category Filter -->
+                        <div class="mb-4">
+                            <h6 class="mb-3">Categories</h6>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input category-filter" type="checkbox" value="FRUITS_AND_VEGETABLES" id="category-fruits" checked>
+                                <label class="form-check-label" for="category-fruits">
+                                    Fruits & Vegetables
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input category-filter" type="checkbox" value="DAIRY_AND_EGGS" id="category-dairy" checked>
+                                <label class="form-check-label" for="category-dairy">
+                                    Dairy & Eggs
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input category-filter" type="checkbox" value="MEAT_AND_SEAFOOD" id="category-meat" checked>
+                                <label class="form-check-label" for="category-meat">
+                                    Meat & Seafood
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input category-filter" type="checkbox" value="BAKERY" id="category-bakery" checked>
+                                <label class="form-check-label" for="category-bakery">
+                                    Bakery
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input category-filter" type="checkbox" value="BEVERAGES" id="category-beverages" checked>
+                                <label class="form-check-label" for="category-beverages">
+                                    Beverages
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input category-filter" type="checkbox" value="SNACKS" id="category-snacks" checked>
+                                <label class="form-check-label" for="category-snacks">
+                                    Snacks
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input category-filter" type="checkbox" value="FROZEN_FOODS" id="category-frozen" checked>
+                                <label class="form-check-label" for="category-frozen">
+                                    Frozen Foods
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input category-filter" type="checkbox" value="PANTRY" id="category-pantry" checked>
+                                <label class="form-check-label" for="category-pantry">
+                                    Pantry
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input category-filter" type="checkbox" value="HOUSEHOLD" id="category-household" checked>
+                                <label class="form-check-label" for="category-household">
+                                    Household
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input category-filter" type="checkbox" value="PERSONAL_CARE" id="category-personal" checked>
+                                <label class="form-check-label" for="category-personal">
+                                    Personal Care
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- In Stock Toggle -->
+                        <div class="mb-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="inStockOnly" checked>
+                                <label class="form-check-label" for="inStockOnly">In Stock Only</label>
+                            </div>
+                        </div>
+
+                        <!-- Brand Filter -->
+                        <div class="mb-4">
+                            <h6 class="mb-3">Brands</h6>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control form-control-sm" id="brandSearch" placeholder="Search brands...">
+                            </div>
+                            <div id="brandList" style="max-height: 200px; overflow-y: auto;">
+                                <div class="text-muted small">Loading brands...</div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-success w-100" id="applyFilters">Apply Filters</button>
+                        <button class="btn btn-outline-secondary w-100 mt-2" id="resetFilters">Reset All</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Section - Middle -->
+            <div class="col-12 col-md-7 col-lg-8">
                 <div class="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-3">
                     <h2 class="mb-0">Our Products</h2>
                     <div class="d-flex gap-2">
@@ -108,7 +263,7 @@
                         <button class="btn btn-secondary" id="clearSearchBtn" type="button">Clear</button>
                     </div>
                 </div>
-                <div class="row product-grid" id="products-container">
+                <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3" id="products-container">
                     <!-- Products will be loaded here -->
                     <div class="col-12 text-center my-5">
                         <div class="spinner-border text-primary" role="status">
@@ -122,47 +277,35 @@
                 </nav>
             </div>
 
-            <!-- Cart Sidebar -->
-            <div class="col-lg-3">
-                <div class="cart-sidebar">
-                    <h4 class="mb-4">Your Cart</h4>
-                    <div id="cart-items">
-                        <p class="text-muted">Your cart is empty</p>
+            <!-- Cart Sidebar - Right -->
+            <div class="col-12 col-md-3 col-lg-2">
+                <div class="card sticky-top" style="top: 20px; margin-bottom: 20px;">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">
+                            <i class="bi bi-cart3 me-2"></i>Your Cart
+                            <span id="cartCount" class="badge bg-danger ms-1">0</span>
+                        </h5>
                     </div>
-                    <hr>
-                    <div class="d-flex justify-content-between mb-3">
-                        <h5>Total:</h5>
-                        <h5 id="cart-total">$0.00</h5>
+                    <div class="card-body p-0">
+                        <div id="cart-items" style="max-height: 550px; overflow-y: auto;">
+                            <p class="text-muted p-3 mb-0">Your cart is empty</p>
+                        </div>
+                        <div class="border-top p-3">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0">Total:</h5>
+                                <h5 class="mb-0 text-primary fw-bold" id="cart-total">$0.00</h5>
+                            </div>
+                            <button id="checkout-btn" class="btn btn-success w-100" disabled>
+                                <i class="bi bi-credit-card me-2"></i>Proceed to Checkout
+                            </button>
+                        </div>
                     </div>
-                    <button id="checkout-btn" class="btn btn-success w-100" disabled>
-                        Proceed to Checkout
-                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Cart Sidebar Offcanvas -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartSidebar">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title">Your Shopping Cart</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <div id="offcanvas-cart-items">
-                <p class="text-muted">Your cart is empty</p>
-            </div>
-            <div class="position-absolute bottom-0 start-0 w-100 p-3 border-top bg-white">
-                <div class="d-flex justify-content-between mb-3">
-                    <h5>Total:</h5>
-                    <h5 id="offcanvas-cart-total">$0.00</h5>
-                </div>
-                <button id="offcanvas-checkout-btn" class="btn btn-success w-100" disabled>
-                    Proceed to Checkout
-                </button>
-            </div>
-        </div>
-    </div>
+    <!-- Cart Sidebar Offcanvas - Removed in favor of static cart -->
 
     <!-- Checkout Modal -->
     <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
@@ -237,10 +380,170 @@
         </div>
     </div>
 
+    <style>
+        /* Custom styles for the cart sidebar */
+        .offcanvas.offcanvas-end {
+            top: 0;
+            right: 0;
+            width: 400px;
+            border-left: 1px solid rgba(0,0,0,.1);
+            box-shadow: -2px 0 10px rgba(0,0,0,.1);
+        }
+        
+        .offcanvas-backdrop {
+            background-color: rgba(0,0,0,.2);
+        }
+        
+        .offcanvas-body {
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+        }
+        
+        #offcanvas-cart-items {
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .cart-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.2s;
+        }
+        
+        .cart-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+        }
+        
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border: 1px solid #dee2e6;
+            background: #fff;
+        }
+        
+        .quantity-input {
+            width: 50px;
+            text-align: center;
+            border-left: none;
+            border-right: none;
+            border-radius: 0;
+        }
+    </style>
+    
     <script>
         // Initialize the store page
         document.addEventListener('DOMContentLoaded', () => {
+            // Cart sidebar is now static, no need for offcanvas initialization
             console.log('Store page loaded');
+            
+            // Load brands and initial products
+            loadBrands();
+            loadProducts(1);
+            
+            // Load saved filters if available
+            const savedFilters = localStorage.getItem('productFilters');
+            if (savedFilters) {
+                const parsedFilters = JSON.parse(savedFilters);
+                Object.assign(filters, parsedFilters);
+                
+                // Update UI to match saved filters
+                inStockOnly.checked = filters.inStockOnly;
+                
+                // Check saved categories
+                document.querySelectorAll('.category-filter').forEach(checkbox => {
+                    checkbox.checked = filters.categories.includes(checkbox.value);
+                });
+            }
+            
+            // Search brands
+            brandSearch?.addEventListener('input', (e) => {
+                renderBrandFilters(e.target.value);
+            });
+            
+            // Apply filters
+            applyFiltersBtn?.addEventListener('click', () => {
+                // Update filters from UI
+                filters.categories = Array.from(document.querySelectorAll('.category-filter:checked')).map(cb => cb.value);
+                filters.inStockOnly = inStockOnly.checked;
+                filters.brands = Array.from(document.querySelectorAll('.brand-filter:checked')).map(cb => cb.value);
+
+                console.log('Apply Filters clicked');
+                console.log('Selected brands:', filters.brands);
+                console.log('Selected categories:', filters.categories);
+                console.log('In Stock Only:', filters.inStockOnly);
+
+                // Save filters to localStorage
+                localStorage.setItem('productFilters', JSON.stringify({
+                    categories: filters.categories,
+                    inStockOnly: filters.inStockOnly,
+                    brands: filters.brands
+                }));
+
+                loadProducts(1);
+            });
+            
+            // Reset filters
+            resetFiltersBtn?.addEventListener('click', () => {
+                // Check all category checkboxes
+                document.querySelectorAll('.category-filter').forEach(checkbox => {
+                    checkbox.checked = true;
+                });
+                
+                // Reset other filters
+                inStockOnly.checked = true;
+                brandSearch.value = '';
+                
+                // Update filter state
+                filters.categories = Array.from(document.querySelectorAll('.category-filter')).map(cb => cb.value);
+                filters.inStockOnly = true;
+                filters.brands = [];
+                
+                // Re-render brand filters
+                renderBrandFilters();
+                
+                // Reload products
+                loadProducts(1);
+            });
+            
+            // Handle category filter changes
+            document.querySelectorAll('.category-filter').forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    // Update filters immediately when category changes
+                    filters.categories = Array.from(document.querySelectorAll('.category-filter:checked')).map(cb => cb.value);
+                    // Save filters to localStorage
+                    localStorage.setItem('productFilters', JSON.stringify({
+                        categories: filters.categories,
+                        inStockOnly: filters.inStockOnly,
+                        brands: filters.brands
+                    }));
+                    loadProducts(1);
+                });
+            });
+            
+            // Handle brand filter changes
+            document.addEventListener('change', (e) => {
+                if (e.target.classList.contains('brand-filter')) {
+                    // Update filters immediately when brand changes
+                    filters.brands = Array.from(document.querySelectorAll('.brand-filter:checked')).map(cb => cb.value);
+                    // Save filters to localStorage
+                    localStorage.setItem('productFilters', JSON.stringify({
+                        categories: filters.categories,
+                        inStockOnly: filters.inStockOnly,
+                        brands: filters.brands
+                    }));
+                    loadProducts(1);
+                }
+            });
             
             // Show the user navigation by default
             const userNav = document.getElementById('user-nav');
@@ -260,7 +563,7 @@
         let products = [];
         let currentPage = 1;
         let totalPages = 1;
-        const pageSize = 9;
+        const pageSize = 12;
         let currentSearch = '';
         let productQuantities = {}; // Track available quantities
         const toastElement = document.getElementById('toast');
@@ -296,45 +599,145 @@
         // DOM Elements
         const productsContainer = document.getElementById('products-container');
         const cartItems = document.getElementById('cart-items');
-        const offcanvasCartItems = document.getElementById('offcanvas-cart-items');
+        const brandList = document.getElementById('brandList');
+        const brandSearch = document.getElementById('brandSearch');
+        const inStockOnly = document.getElementById('inStockOnly');
+        const applyFiltersBtn = document.getElementById('applyFilters');
+        const resetFiltersBtn = document.getElementById('resetFilters');
+        
+        // Filter state
+        const filters = {
+            categories: Array.from(document.querySelectorAll('.category-filter:checked')).map(cb => cb.value),
+            inStockOnly: true,
+            brands: []
+        };
+        
+        // Available brands (will be populated from API)
+        let availableBrands = [];
         const cartCount = document.getElementById('cartCount');
         const cartTotal = document.getElementById('cart-total');
-        const offcanvasCartTotal = document.getElementById('offcanvas-cart-total');
         const checkoutBtn = document.getElementById('checkout-btn');
-        const offcanvasCheckoutBtn = document.getElementById('offcanvas-checkout-btn');
         const searchInput = document.getElementById('searchInput');
         const searchBtn = document.getElementById('searchBtn');
         const clearSearchBtn = document.getElementById('clearSearchBtn');
         const paginationEl = document.getElementById('pagination');
-        const checkoutModalElement = document.getElementById('checkoutModal');
-        const checkoutModal = new bootstrap.Modal(checkoutModalElement);
-        const checkoutForm = document.getElementById('checkout-form');
-        const checkoutError = document.getElementById('checkoutError');
-        const checkoutItemCount = document.getElementById('checkoutItemCount');
-        const checkoutTotalAmount = document.getElementById('checkoutTotalAmount');
-        const confirmCheckoutBtn = document.getElementById('confirmCheckoutBtn');
+        
+        // Checkout form elements
         const customerNameInput = document.getElementById('customerName');
         const customerEmailInput = document.getElementById('customerEmail');
         const phoneNumberInput = document.getElementById('phoneNumber');
         const addressInput = document.getElementById('address');
         const paymentMethodSelect = document.getElementById('paymentMethod');
         const notesInput = document.getElementById('checkoutNotes');
+        const checkoutItemCount = document.getElementById('checkoutItemCount');
+        const checkoutTotalAmount = document.getElementById('checkoutTotalAmount');
+        const checkoutError = document.getElementById('checkoutError');
+        const checkoutForm = document.getElementById('checkout-form');
+        const checkoutModalElement = document.getElementById('checkoutModal');
+        const checkoutModal = new bootstrap.Modal(checkoutModalElement);
+        const confirmCheckoutBtn = document.getElementById('confirmCheckoutBtn');
+        
+        // Initialize checkout button event listener
+        if (confirmCheckoutBtn) {
+            confirmCheckoutBtn.addEventListener('click', submitCheckout);
+        }
+        // API and image configuration
         const baseApiUrl = window.location.origin;
         const API_URL = '/api/v1/products';
         const placeholderImage = 'https://via.placeholder.com/300x200?text=No+Image';
 
 
-        // Load products
+        // Load brands from API
+        async function loadBrands() {
+            try {
+                const response = await fetch('/api/v1/products/brands');
+                if (response.ok) {
+                    const brands = await response.json();
+                    // Filter out empty brands
+                    availableBrands = brands.filter(brand => brand && brand.trim() !== '');
+                    console.log('Loaded brands:', availableBrands);
+                    renderBrandFilters();
+                } else {
+                    console.error('Failed to load brands');
+                    brandList.innerHTML = '<div class="text-muted small">Failed to load brands</div>';
+                }
+            } catch (error) {
+                console.error('Error loading brands:', error);
+                brandList.innerHTML = '<div class="text-muted small">Error loading brands</div>';
+            }
+        }
+
+        // Extract brands from products (will be called after loading products)
+        function extractBrandsFromProducts(products) {
+            const brandSet = new Set();
+            products.forEach(product => {
+                if (product.brand) {
+                    brandSet.add(product.brand);
+                }
+            });
+            availableBrands = Array.from(brandSet).sort();
+            renderBrandFilters();
+        }
+        
+        // Render brand checkboxes
+        function renderBrandFilters(searchTerm = '') {
+            const filteredBrands = availableBrands.filter(brand => 
+                brand.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            
+            if (filteredBrands.length === 0) {
+                brandList.innerHTML = '<div class="text-muted small">No brands found</div>';
+                return;
+            }
+            
+            brandList.innerHTML = filteredBrands.map(brand => `
+                <div class="form-check">
+                    <input class="form-check-input brand-filter" type="checkbox" value="${brand}" id="brand-${brand.replace(/\s+/g, '-').toLowerCase()}"
+                           ${filters.brands.includes(brand) ? 'checked' : ''}>
+                    <label class="form-check-label" for="brand-${brand.replace(/\s+/g, '-').toLowerCase()}">
+                        ${brand}
+                    </label>
+                </div>
+            `).join('');
+        }
+        
+        // Load products with filters
         async function loadProducts(page = 1) {
+            // Update filter state
+            filters.categories = Array.from(document.querySelectorAll('.category-filter:checked')).map(cb => cb.value);
+            filters.inStockOnly = inStockOnly.checked;
+            filters.brands = Array.from(document.querySelectorAll('.brand-filter:checked')).map(cb => cb.value);
+            
+            // Save filters to localStorage
+            localStorage.setItem('productFilters', JSON.stringify(filters));
+
+            // Log current filters for debugging
+            console.log('Current filters:', JSON.stringify(filters, null, 2));
             try {
                 console.log('Fetching products from /api/v1/products');
                 const params = new URLSearchParams({
                     page: page - 1,
-                    size: pageSize,
+                    size: pageSize
                 });
 
+                // Add search query if available (only user's search input, not brand names)
                 if (currentSearch) {
                     params.append('name', currentSearch);
+                }
+
+                // Add category filters
+                if (filters.categories && filters.categories.length > 0) {
+                    params.append('categories', filters.categories.join(','));
+                }
+
+                // Add brand filters
+                if (filters.brands && filters.brands.length > 0) {
+                    params.append('brands', filters.brands.join(','));
+                }
+
+                // Add in-stock filter
+                if (filters.inStockOnly) {
+                    params.append('inStockOnly', 'true');
                 }
 
                 const response = await fetch(`/api/v1/products?${params.toString()}`);
@@ -446,25 +849,9 @@
                     const bgColor = `#${Math.floor(Math.random()*16777215).toString(16)}`;
                     resolvedImageUrl = `data:image/svg+xml;utf8,<svg width='300' height='200' xmlns='http://www.w3.org/2000/svg'><rect width='100%' height='100%' fill='${bgColor.replace('#', '%23')}'/><text x='50%' y='50%' font-size='60' text-anchor='middle' dominant-baseline='middle' fill='white'>${firstLetter}</text></svg>`;
                 }
-                
-                console.log('Final image URL for product', product.id, ':', resolvedImageUrl);
-
-                return `
-                <div class="col-md-4 col-sm-6">
-                    <div class="card product-card h-100" data-product-id="${product.id}">
-                        <img src="${resolvedImageUrl}" 
-                             class="card-img-top product-image" 
-                             alt="${product.name}" 
-                             loading="lazy"
-                             onerror="this.onerror=null;
-                                     const name = '${product.name || 'Product'}'.replace(/'/g, '\\'');
-                                     const letter = name.charAt(0).toUpperCase();
-                                     const color = '#' + Math.floor(Math.random()*16777215).toString(16);
-                                     this.src = 'data:image/svg+xml;utf8,' + 
-                                       '<svg width=\'300\' height=\'200\' xmlns=\'http://www.w3.org/2000/svg\'>' +
-                                       '<rect width=\'100%\' height=\'100%\' fill=\'' + color + '\'/>' +
-                                       '<text x=\'50%\' y=\'50%\' font-size=\'60\' text-anchor=\'middle\' ' +
-                                       'dominant-baseline=\'middle\' fill=\'white\'>' + letter + '</text></svg>';">
+                return `<div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <img src="${resolvedImageUrl}" class="card-img-top" alt="${product.name}" style="height: 200px; object-fit: cover;">
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title">${product.name}</h5>
                             <p class="card-text text-muted">${product.description || 'No description available'}</p>
@@ -585,63 +972,33 @@
 
         // Update cart UI
         function updateCart() {
-            // Update cart count
-            const itemCount = cart.reduce((total, item) => total + item.quantity, 0);
-            cartCount.textContent = itemCount;
+            // Enable checkout button
+            checkoutBtn.disabled = false;
             
-            // Calculate total
+            // Update cart items as 3-per-row grid
+            cartItems.innerHTML = `<div class="cart-grid">${cart.map(item => `
+                <div class="cart-grid-item">
+                    <div class="cart-grid-item-name" title="${item.name}">${item.name}</div>
+                    <div class="cart-grid-item-price">$${item.price.toFixed(2)} ea</div>
+                    <div class="cart-grid-qty">
+                        <button class="btn btn-outline-secondary decrease-quantity" data-id="${item.id}" title="Decrease">
+                            <i class="bi bi-dash"></i>
+                        </button>
+                        <span>${item.quantity}</span>
+                        <button class="btn btn-outline-primary increase-quantity" data-id="${item.id}" title="Increase">
+                            <i class="bi bi-plus"></i>
+                        </button>
+                    </div>
+                    <div class="cart-grid-item-total">$${(item.price * item.quantity).toFixed(2)}</div>
+                    <button class="btn btn-outline-danger cart-grid-remove remove-item" data-id="${item.id}" title="Remove">
+                        <i class="bi bi-x"></i>
+                    </button>
+                </div>
+            `).join('')}</div>`;
+
+            // Update cart total
             const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             cartTotal.textContent = `$${total.toFixed(2)}`;
-            offcanvasCartTotal.textContent = `$${total.toFixed(2)}`;
-            
-            // Update cart items
-            if (cart.length === 0) {
-                cartItems.innerHTML = '<p class="text-muted">Your cart is empty</p>';
-                offcanvasCartItems.innerHTML = '<p class="text-muted">Your cart is empty</p>';
-                checkoutBtn.disabled = true;
-                offcanvasCheckoutBtn.disabled = true;
-                return;
-            }
-            
-            // Enable checkout buttons
-            checkoutBtn.disabled = false;
-            offcanvasCheckoutBtn.disabled = false;
-            
-            // Update cart items list with quantity controls
-            cartItems.innerHTML = cart.map(item => `
-                <div class="cart-item">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h6 class="mb-1">${item.name}</h6>
-                            <div class="d-flex align-items-center mt-2">
-                                <button class="btn btn-sm btn-outline-secondary quantity-btn decrease-quantity" 
-                                        data-id="${item.id}" 
-                                        title="Decrease quantity">
-                                    <i class="bi bi-dash"></i>
-                                </button>
-                                <span class="mx-2" style="min-width: 30px; text-align: center;">${item.quantity}</span>
-                                <button class="btn btn-sm btn-outline-primary quantity-btn increase-quantity" 
-                                        data-id="${item.id}" 
-                                        title="Increase quantity">
-                                    <i class="bi bi-plus"></i>
-                                </button>
-                                <span class="ms-3 text-muted">$${item.price.toFixed(2)} each</span>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center mt-4">
-                            <button class="btn btn-sm btn-outline-danger remove-item" 
-                                    data-id="${item.id}" 
-                                    title="Remove item">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                            <span class="ms-3 fw-bold">$${(item.price * item.quantity).toFixed(2)}</span>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-            
-            // Copy to offcanvas cart
-            offcanvasCartItems.innerHTML = cartItems.innerHTML;
             
             // Add event listeners
             document.querySelectorAll('.decrease-quantity').forEach(button => {
@@ -895,7 +1252,6 @@
             loadProducts();
             
             checkoutBtn.addEventListener('click', checkout);
-            offcanvasCheckoutBtn.addEventListener('click', checkout);
             confirmCheckoutBtn.addEventListener('click', submitCheckout);
 
             checkoutModalElement.addEventListener('hidden.bs.modal', () => {

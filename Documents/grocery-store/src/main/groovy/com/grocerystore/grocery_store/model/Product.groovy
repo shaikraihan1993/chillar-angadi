@@ -33,9 +33,8 @@ class Product {
     @Column(nullable = false)
     Integer quantity = 0
 
-    @NotBlank(message = "Brand is required")
     @Size(max = 50, message = "Brand must be less than 50 characters")
-    @Column(nullable = false)
+    @Column(nullable = true)
     String brand
 
     @Size(max = 100, message = "Manufacturer must be less than 100 characters")

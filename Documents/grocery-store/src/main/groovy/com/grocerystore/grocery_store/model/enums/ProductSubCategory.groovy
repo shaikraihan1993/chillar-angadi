@@ -25,7 +25,49 @@ enum ProductSubCategory {
     BREAD('Bread', ProductCategory.BAKERY),
     PASTRIES('Pastries', ProductCategory.BAKERY),
     CAKES('Cakes', ProductCategory.BAKERY),
-    COOKIES('Cookies', ProductCategory.BAKERY)
+    COOKIES('Cookies', ProductCategory.BAKERY),
+
+    // Beverages
+    WATER('Water', ProductCategory.BEVERAGES),
+    SOFT_DRINKS('Soft Drinks', ProductCategory.BEVERAGES),
+    JUICES('Juices', ProductCategory.BEVERAGES),
+    COFFEE_AND_TEA('Coffee & Tea', ProductCategory.BEVERAGES),
+    ENERGY_DRINKS('Energy Drinks', ProductCategory.BEVERAGES),
+
+    // Snacks
+    CHIPS_AND_CRISPS('Chips & Crisps', ProductCategory.SNACKS),
+    NUTS_AND_SEEDS('Nuts & Seeds', ProductCategory.SNACKS),
+    POPCORN('Popcorn', ProductCategory.SNACKS),
+    CRACKERS('Crackers', ProductCategory.SNACKS),
+    CANDY_AND_CHOCOLATE('Candy & Chocolate', ProductCategory.SNACKS),
+
+    // Frozen Foods
+    FROZEN_MEALS('Frozen Meals', ProductCategory.FROZEN_FOODS),
+    ICE_CREAM('Ice Cream', ProductCategory.FROZEN_FOODS),
+    FROZEN_VEGETABLES('Frozen Vegetables', ProductCategory.FROZEN_FOODS),
+    FROZEN_MEAT('Frozen Meat', ProductCategory.FROZEN_FOODS),
+    FROZEN_PIZZA('Frozen Pizza', ProductCategory.FROZEN_FOODS),
+
+    // Pantry
+    PASTA_AND_NOODLES('Pasta & Noodles', ProductCategory.PANTRY),
+    RICE_AND_GRAINS('Rice & Grains', ProductCategory.PANTRY),
+    CANNED_GOODS('Canned Goods', ProductCategory.PANTRY),
+    SAUCES_AND_CONDIMENTS('Sauces & Condiments', ProductCategory.PANTRY),
+    COOKING_OIL('Cooking Oil', ProductCategory.PANTRY),
+    BAKING_SUPPLIES('Baking Supplies', ProductCategory.PANTRY),
+
+    // Household
+    CLEANING_SUPPLIES('Cleaning Supplies', ProductCategory.HOUSEHOLD),
+    LAUNDRY('Laundry', ProductCategory.HOUSEHOLD),
+    PAPER_PRODUCTS('Paper Products', ProductCategory.HOUSEHOLD),
+    KITCHEN_SUPPLIES('Kitchen Supplies', ProductCategory.HOUSEHOLD),
+
+    // Personal Care
+    BATH_AND_BODY('Bath & Body', ProductCategory.PERSONAL_CARE),
+    HAIR_CARE('Hair Care', ProductCategory.PERSONAL_CARE),
+    ORAL_CARE('Oral Care', ProductCategory.PERSONAL_CARE),
+    SKIN_CARE('Skin Care', ProductCategory.PERSONAL_CARE),
+    HEALTH_AND_WELLNESS('Health & Wellness', ProductCategory.PERSONAL_CARE)
 
     final String displayName
     final ProductCategory category

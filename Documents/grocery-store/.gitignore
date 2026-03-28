@@ -35,3 +35,12 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Docker ###
+.env
+docker-compose.override.yml
+uploads/
+*.sql
+mysql-config/
+logs/
+
