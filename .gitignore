@@ -50,3 +50,7 @@ ADMIN_CREDENTIALS.local.txt
 
 ### Technical guide PDF (contains admin credentials) ###
 docs/Chillar_Angadi_Technical_Guide.pdf
+
+### SQL that belongs in the repo (overrides *.sql above) ###
+!src/main/resources/db/migration/*.sql
+!docs/data-fixes/*.sql
