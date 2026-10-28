@@ -10,4 +10,4 @@ The project overview, setup and API list are in the [main README](../README.md).
 | [diagrams/](diagrams/) | `architecture.png` and `er-diagram.png` |
 | [data-fixes/](data-fixes/) | One-off SQL data fixes, each with an undo script |
 
-Local-only files (not in git): `Chillar_Angadi_Technical_Guide.pdf` contains admin credentials, `AUTH_IMPLEMENTATION.md` is a draft plan, and `HELP.md` is the generated Spring Initializr help file.
+Local-only files (not in git): `Chillar_Angadi_Technical_Guide.pdf` contains admin credentials, and `AUTH_IMPLEMENTATION.md` is a draft plan.
