@@ -246,7 +246,7 @@ GET product:1
 - Integrate a real payment gateway. UPI, cards and net banking are labels only today.
 
 **Next**
-- Bring back search via `grocery-search-service` (Elasticsearch); the integration patch is in `.search-backup/`.
+- Faster, typo-tolerant product search (today it's a simple name match in the database).
 - Order notifications (email/SMS) and customer-side cancellation.
 - Move photos from `LONGBLOB` to object storage + CDN; map or drop `product_images.product_id`.
 - Admin user management (promote, disable, reset) and an audit log.
