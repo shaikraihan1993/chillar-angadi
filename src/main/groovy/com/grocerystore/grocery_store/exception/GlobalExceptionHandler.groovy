@@ -32,6 +32,17 @@ class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST)
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    ResponseEntity<ErrorDetails> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(
+            LocalDateTime.now(),
+            ex.message,
+            request.getDescription(false),
+            "BAD_REQUEST"
+        )
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST)
+    }
+
     @ExceptionHandler(Exception.class)
     ResponseEntity<ErrorDetails> handleGlobalException(Exception ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(

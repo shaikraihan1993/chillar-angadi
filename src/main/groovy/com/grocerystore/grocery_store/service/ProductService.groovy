@@ -38,6 +38,10 @@ class ProductService {
         productRepository.findAllWithImages(pageable)
     }
 
+    List<Product> findAll() {
+        productRepository.findAll()
+    }
+
     /**
      * Find products with filters
      */

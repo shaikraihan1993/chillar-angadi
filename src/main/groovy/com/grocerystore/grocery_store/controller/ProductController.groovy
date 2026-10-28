@@ -1,6 +1,7 @@
 package com.grocerystore.grocery_store.controller
 
 import com.grocerystore.grocery_store.dto.ProductDto
+import com.grocerystore.grocery_store.exception.ResourceNotFoundException
 import com.grocerystore.grocery_store.model.Product
 import com.grocerystore.grocery_store.model.ProductImage
 import com.grocerystore.grocery_store.service.ProductService
@@ -82,7 +83,7 @@ class ProductController {
         try {
             def product = productService.findById(id)
             new ResponseEntity<>(ProductDto.from(product), HttpStatus.OK)
-        } catch (NoSuchElementException e) {
+        } catch (ResourceNotFoundException | NoSuchElementException e) {
             new ResponseEntity<>(HttpStatus.NOT_FOUND)
         } catch (Exception e) {
             new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -153,6 +154,63 @@ class ProductController {
             new ResponseEntity<>(HttpStatus.NOT_FOUND)
         } catch (Exception e) {
             new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    // DEMO 1: Path Parameters
+    // URL segments that identify a specific resource.
+    // Example: GET /api/v1/products/category/dairy/brand/Organic
+    // Both {category} and {brand} are baked into the URL path itself.
+    @GetMapping("/category/{category}/brand/{brand}")
+    ResponseEntity<?> getByCategory(
+            @PathVariable String category,
+            @PathVariable String brand
+    ) {
+        try {
+            def products = productService.findAll().findAll { p ->
+                (p.category?.name()?.equalsIgnoreCase(category) || p.category?.displayName?.equalsIgnoreCase(category)) && p.brand?.equalsIgnoreCase(brand)
+            }
+            new ResponseEntity<>([
+                category: category,
+                brand   : brand,
+                results : ProductDto.fromList(products),
+                count   : products.size()
+            ], HttpStatus.OK)
+        } catch (Exception e) {
+            new ResponseEntity<>([error: e.message], HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    // DEMO 2: Query Parameters
+    // Optional key=value pairs appended after ? in the URL.
+    // Example: GET /api/v1/products/filter?minPrice=5&maxPrice=50&inStock=true&sortBy=price
+    // All params are optional; defaults kick in when omitted.
+    @GetMapping("/filter")
+    ResponseEntity<?> filterProducts(
+            @RequestParam(required = false, defaultValue = "0")    double minPrice,
+            @RequestParam(required = false, defaultValue = "99999") double maxPrice,
+            @RequestParam(required = false, defaultValue = "false") boolean inStock,
+            @RequestParam(required = false, defaultValue = "name")  String sortBy
+    ) {
+        try {
+            def products = productService.findAll().findAll { p ->
+                p.price >= minPrice && p.price <= maxPrice &&
+                (!inStock || p.quantity > 0)
+            }
+
+            if (sortBy == "price") {
+                products = products.sort { it.price }
+            } else {
+                products = products.sort { it.name }
+            }
+
+            new ResponseEntity<>([
+                filters: [minPrice: minPrice, maxPrice: maxPrice, inStock: inStock, sortBy: sortBy],
+                results: ProductDto.fromList(products),
+                count  : products.size()
+            ], HttpStatus.OK)
+        } catch (Exception e) {
+            new ResponseEntity<>([error: e.message], HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 }
