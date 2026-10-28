@@ -181,7 +181,8 @@
             transition: opacity 1.2s var(--ease), transform 1.2s var(--ease);
         }
         .hero.in .blob { opacity: 1; transform: scale(1) rotate(var(--r, 0deg)); }
-        .blob img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.15); transition: transform 1.6s var(--ease); }
+        .blob img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.15); transition: transform 1.6s var(--ease), opacity .6s var(--ease); }
+        .blob img.swapping { opacity: 0; }
         .hero.in .blob img { transform: scale(1); }
         .blob.b1 { width: 62%; height: 70%; right: 4%; top: 2%; border-radius: 48% 52% 44% 56% / 55% 45% 55% 45%; --r: 3deg; transition-delay: .2s; }
         .blob.b2 { width: 44%; height: 46%; left: 0; bottom: 4%; border-radius: 42% 58% 60% 40% / 45% 55% 45% 55%; --r: -6deg; transition-delay: .35s; }
@@ -924,17 +925,56 @@
             }
         }
 
+        // Hero collage: three photos from the house range, a different trio on every visit and sign-in.
+        const HERO_KEY = 'ca_hero';
+        const HERO_BRAND = 'Angadi Farm';
+        const HERO_FIRST = [/ghee/i, /ragi/i];   // first-ever visit leads with these
+        let heroPool = [];
+
+        function shuffle(list) {
+            const a = [...list];
+            for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+            return a;
+        }
+
+        function pickHeroTrio() {
+            const last = storage.get(HERO_KEY, null);
+            let trio;
+            if (!Array.isArray(last)) {
+                const firsts = HERO_FIRST.map(rx => heroPool.find(p => rx.test(p.name))).filter(Boolean);
+                trio = [...firsts, ...shuffle(heroPool.filter(p => !firsts.includes(p)))].slice(0, 3);
+            } else {
+                // Avoid repeating any photo from the previous trio when the pool allows it
+                const fresh = shuffle(heroPool.filter(p => !last.includes(p.id)));
+                trio = [...fresh, ...shuffle(heroPool.filter(p => last.includes(p.id)))].slice(0, 3);
+            }
+            storage.set(HERO_KEY, trio.map(p => p.id));
+            return trio;
+        }
+
+        function renderHero({ animate = false } = {}) {
+            if (!heroPool.length) return;
+            const trio = pickHeroTrio();
+            ['heroImg1', 'heroImg2', 'heroImg3'].forEach((id, i) => {
+                const img = $(id), p = trio[i];
+                if (!p) { img.parentElement.style.background = PALETTE[i]; return; }
+                const apply = () => { img.src = imgFor(p); img.alt = p.name; };
+                if (!animate || reduceMotion) { apply(); return; }
+                img.classList.add('swapping');
+                setTimeout(() => { apply(); img.onload = () => img.classList.remove('swapping'); }, 350 + i * 120);
+            });
+        }
+
         async function loadHero() {
             try {
-                const res = await fetch(`${API}?size=50`);
+                const res = await fetch(`${API}?size=200`);
                 const data = await res.json();
                 const list = data.products || [];
                 $('statProducts').textContent = data.totalItems ?? list.length;
                 const withImg = list.filter(p => p.imageId);
-                ['heroImg1', 'heroImg2', 'heroImg3'].forEach((id, i) => {
-                    const p = withImg[[3, 1, 0][i] % Math.max(withImg.length, 1)];
-                    if (p) { $(id).src = imgFor(p); $(id).alt = p.name; } else { $(id).parentElement.style.background = PALETTE[i]; }
-                });
+                const house = withImg.filter(p => p.brand === HERO_BRAND);
+                heroPool = house.length >= 3 ? house : withImg;
+                renderHero();
             } catch { /* hero falls back to colour blobs */ }
         }
 
@@ -1409,6 +1449,7 @@
         function signedIn(user, message) {
             state.user = user;
             renderAccountButton();
+            renderHero({ animate: true });
             toast(message);
             if (afterSignIn) { const go = afterSignIn; afterSignIn = null; go(); return; }
             setAccountView('viewAccount');
