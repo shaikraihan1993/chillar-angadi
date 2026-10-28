@@ -4,7 +4,7 @@
 
 It's a single Spring Boot service written in Groovy. The service serves the web pages and a JSON REST API, keeps data (including product photos) in MySQL/MariaDB, and caches products in Redis.
 
-> A full technical guide (architecture, schema, features, admin access and roadmap) is generated as
+> More docs live in [`docs/`](docs/README.md). A full technical guide (architecture, schema, features, admin access and roadmap) is generated as
 > `docs/Chillar_Angadi_Technical_Guide.pdf`. It contains admin credentials, so it is **git-ignored** and only
 > exists on the machine where it was generated.
 
@@ -116,7 +116,7 @@ One-off data fixes live in `docs/data-fixes/`, each with an undo script. On 2026
 docker compose up -d
 ```
 
-Then open http://localhost:8089/store.html. See [DOCKER.md](DOCKER.md) and `./docker.sh help` for more.
+Then open http://localhost:8089/store.html. See [docs/DOCKER.md](docs/DOCKER.md) and `./docker.sh help` for more.
 
 ### Option B: run the app with Gradle
 
@@ -217,9 +217,13 @@ src/main/resources/
 ├── static/js/             admin-session.js (admin guard + sign-out)
 └── db/migration/          Flyway migrations
 
-docs/diagrams/             architecture.png, er-diagram.png
-docs/data-fixes/           One-off SQL data fixes (+ undo scripts)
-PHOTO_CREDITS.md           Unsplash photo credits
+docs/
+├── README.md              Index of the docs below
+├── DOCKER.md              Docker setup and docker.sh commands
+├── PHOTO_CREDITS.md       Unsplash photo credits
+├── IMPROVEMENTS.md        Earlier improvement roadmap
+├── diagrams/              architecture.png, er-diagram.png
+└── data-fixes/            One-off SQL data fixes (+ undo scripts)
 ```
 
 ---
