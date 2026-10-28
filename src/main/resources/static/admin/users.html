@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users — Chillar Angadi Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/admin-theme.css">
+    <link rel="icon" type="image/png" href="/images/logo-mark.png">
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/admin/index.html"><img src="/images/logo-mark.png" alt="" class="brand-mark">Chillar Angadi <span class="brand-sub">Admin</span></a>
+        <div>
+            <a href="/store.html" class="btn btn-outline-light btn-sm me-2">
+                <i class="bi bi-shop"></i> View store
+            </a>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+            <div class="d-flex flex-column flex-shrink-0 p-3">
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                        <a href="/admin/index.html" class="nav-link">
+                            <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/products.html" class="nav-link">
+                            <i class="bi bi-box-seam me-2"></i>Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/orders.html" class="nav-link">
+                            <i class="bi bi-cart3 me-2"></i>Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/users.html" class="nav-link active" aria-current="page">
+                            <i class="bi bi-people me-2"></i>Users
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/data-dashboard.html" class="nav-link">
+                            <i class="bi bi-graph-up me-2"></i>Analytics
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pb-5">
+            <div class="page-head">
+                <div><h1>Users</h1><p>Everyone with an account. Guest checkouts don't create accounts.</p></div>
+                <input type="search" class="form-control" id="user-search" placeholder="Search name, email or phone…" style="max-width:300px">
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-sm-4"><div class="card stat-card"><div class="label">Accounts</div><div class="value" id="u-total">—</div></div></div>
+                <div class="col-sm-4"><div class="card stat-card"><div class="label">Customers</div><div class="value" id="u-customers">—</div></div></div>
+                <div class="col-sm-4"><div class="card stat-card"><div class="label">Admins</div><div class="value" id="u-admins">—</div></div></div>
+            </div>
+
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead><tr><th class="ps-3">Name</th><th>Contact</th><th>Role</th><th class="text-end">Orders</th><th class="text-end">Spent</th><th>Member since</th><th>Last order</th></tr></thead>
+                            <tbody id="users-body"><tr><td colspan="7" class="empty-note">Loading users…</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <p class="text-muted small mt-2">Orders and spend count only orders placed while signed in to that account.</p>
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Shared helpers for admin pages
+    const inr = n => '₹' + Number(n || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const toDate = t => new Date(typeof t === 'number' ? (t < 1e12 ? t * 1000 : t) : t);
+</script>
+<script>
+    let allUsers = [];
+    const fmtDate = t => t ? toDate(t).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+
+    function renderUsers() {
+        const q = document.getElementById('user-search').value.trim().toLowerCase();
+        const list = allUsers.filter(u => !q || [u.firstName, u.lastName, u.email, u.username, u.phoneNumber].join(' ').toLowerCase().includes(q));
+        document.getElementById('users-body').innerHTML = list.length ? list.map(u => {
+            const name = `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.username;
+            const initials = ((u.firstName || '')[0] || '') + ((u.lastName || '')[0] || '') || (u.username || '?')[0];
+            const admin = u.role === 'ROLE_ADMIN';
+            return `<tr>
+                <td class="ps-3"><div class="d-flex align-items-center gap-2">
+                    <span class="avatar-sm" style="${admin ? 'background:var(--ca-ink)' : ''}">${esc(initials.toUpperCase())}</span>
+                    <div><div class="fw-bold">${esc(name)}</div><div class="small text-muted">${esc(u.username)}</div></div>
+                </div></td>
+                <td><div>${esc(u.email)}</div><div class="small text-muted">${esc(u.phoneNumber)}</div></td>
+                <td><span class="role-pill ${admin ? 'admin' : 'customer'}">${admin ? 'ADMIN' : 'CUSTOMER'}</span></td>
+                <td class="text-end">${u.orders}</td>
+                <td class="text-end">${inr(u.spent)}</td>
+                <td>${fmtDate(u.memberSince)}</td>
+                <td>${fmtDate(u.lastOrder)}</td>
+            </tr>`;
+        }).join('') : '<tr><td colspan="7" class="empty-note">No users match your search</td></tr>';
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const res = await fetch('/api/v1/dashboard/users');
+            if (!res.ok) throw new Error(res.status);
+            const data = await res.json();
+            allUsers = data.users;
+            document.getElementById('u-total').textContent = data.total;
+            document.getElementById('u-customers').textContent = data.customers;
+            document.getElementById('u-admins').textContent = data.admins;
+            renderUsers();
+        } catch (e) {
+            document.getElementById('users-body').innerHTML = '<tr><td colspan="7" class="empty-note">Could not load users</td></tr>';
+        }
+        document.getElementById('user-search').addEventListener('input', renderUsers);
+    });
+</script>
+<script src="/js/admin-session.js"></script>
+</body>
+</html>

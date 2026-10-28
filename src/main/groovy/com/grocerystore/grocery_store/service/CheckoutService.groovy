@@ -6,6 +6,7 @@ import com.grocerystore.grocery_store.model.Order
 import com.grocerystore.grocery_store.model.OrderItem
 import com.grocerystore.grocery_store.model.enums.OrderStatus
 import com.grocerystore.grocery_store.model.Product
+import com.grocerystore.grocery_store.model.User
 import com.grocerystore.grocery_store.repository.OrderRepository
 import com.grocerystore.grocery_store.repository.ProductRepository
 import groovy.util.logging.Slf4j
@@ -24,8 +25,18 @@ class CheckoutService {
         this.orderRepository = orderRepository
     }
     
+    /**
+     * @param user the signed-in customer, or null for a guest checkout.
+     *             Missing contact fields fall back to the customer's profile.
+     */
     @Transactional
-    Order processCheckout(CheckoutRequest request) {
+    Order processCheckout(CheckoutRequest request, User user = null) {
+        if (user && request) {
+            request.customerName = request.customerName?.trim() ?: "${user.firstName} ${user.lastName}".trim()
+            request.customerEmail = request.customerEmail?.trim() ?: user.email
+            request.phoneNumber = request.phoneNumber?.trim() ?: user.phoneNumber
+            request.address = request.address?.trim() ?: user.address
+        }
         if (!request?.items || request.items.isEmpty()) {
             throw new IllegalArgumentException("No items provided for checkout")
         }
@@ -35,6 +46,9 @@ class CheckoutService {
             Product product = productRepository.findById(item.productId).orElse(null)
             if (!product) {
                 throw new IllegalArgumentException("Product not found with id: ${item.productId}")
+            }
+            if (!item.quantity || item.quantity < 1) {
+                throw new IllegalArgumentException("Quantity must be at least 1 for product: ${product.name}")
             }
             if (product.quantity < item.quantity) {
                 throw new InsufficientStockException("Insufficient stock for product: ${product.name}")
@@ -58,6 +72,7 @@ class CheckoutService {
         }
 
         Order order = new Order(
+                user: user,
                 customerName: request.customerName,
                 phoneNumber: request.phoneNumber,
                 address: request.address,

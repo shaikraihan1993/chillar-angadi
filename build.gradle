@@ -34,6 +34,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'    // For JSON processing
 
+	// Security (session login for customers and admins)
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
 	// JPA / Hibernate
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	

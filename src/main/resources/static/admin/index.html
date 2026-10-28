@@ -3,218 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Grocery Store</title>
+    <title>Dashboard — Chillar Angadi Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-    <link rel="icon" type="image/png" href="/images/logo.png">
-    <style>
-        .sidebar {
-            min-height: calc(100vh - 56px);
-            background-color: #f8f9fa;
-            padding: 20px 0;
-        }
-        .nav-link {
-            color: #333;
-            padding: 10px 20px;
-            margin: 5px 10px;
-            border-radius: 5px;
-        }
-        .nav-link:hover, .nav-link.active {
-            background-color: #e9ecef;
-            color: #0d6efd;
-        }
-        .main-content {
-            padding: 20px;
-        }
-        .card {
-            margin-bottom: 20px;
-            border: none;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-        }
-        .card-header {
-            background-color: #f8f9fa;
-            font-weight: 600;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/admin-theme.css">
+    <link rel="icon" type="image/png" href="/images/logo-mark.png">
+
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">Grocery Store Admin</a>
-            <div>
-                <a href="/store.html" class="btn btn-outline-light me-2">
-                    <i class="bi bi-shop"></i> Back to Store
-                </a>
-            </div>
-        </div>
-    </nav>
-
+<nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
-                <div class="d-flex flex-column flex-shrink-0 p-3">
-                    <ul class="nav nav-pills flex-column mb-auto">
-                        <li class="nav-item">
-                            <a href="/admin/" class="nav-link active">
-                                <i class="bi bi-speedometer2 me-2"></i>
-                                Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/admin/products.html" class="nav-link">
-                                <i class="bi bi-box-seam me-2"></i>
-                                Products
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/admin/orders.html" class="nav-link">
-                                <i class="bi bi-cart3 me-2"></i>
-                                Orders
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/admin/users.html" class="nav-link">
-                                <i class="bi bi-people me-2"></i>
-                                Users
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Main content -->
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Dashboard</h1>
-                </div>
-
-                <!-- Stats Cards -->
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Total Orders</h5>
-                                <h2 class="card-text" id="total-orders">0</h2>
-                                <p class="text-muted">+5% from last month</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Total Products</h5>
-                                <h2 class="card-text" id="total-products">0</h2>
-                                <p class="text-muted">+2 new this week</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Total Users</h5>
-                                <h2 class="card-text" id="total-users">0</h2>
-                                <p class="text-muted">+10% from last month</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recent Orders -->
-                <div class="card mt-4">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Recent Orders</h5>
-                        <a href="/admin/orders.html" class="btn btn-sm btn-outline-primary">View All</a>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Order ID</th>
-                                        <th>Customer</th>
-                                        <th>Date</th>
-                                        <th>Amount</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="recent-orders">
-                                    <!-- Orders will be loaded here -->
-                                    <tr>
-                                        <td colspan="6" class="text-center">Loading orders...</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </main>
+        <a class="navbar-brand" href="/admin/index.html"><img src="/images/logo-mark.png" alt="" class="brand-mark">Chillar Angadi <span class="brand-sub">Admin</span></a>
+        <div>
+            <a href="/store.html" class="btn btn-outline-light btn-sm me-2">
+                <i class="bi bi-shop"></i> View store
+            </a>
         </div>
     </div>
+</nav>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Load dashboard data
-        document.addEventListener('DOMContentLoaded', () => {
-            loadDashboardData();
-        });
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+            <div class="d-flex flex-column flex-shrink-0 p-3">
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                        <a href="/admin/index.html" class="nav-link active" aria-current="page">
+                            <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/products.html" class="nav-link">
+                            <i class="bi bi-box-seam me-2"></i>Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/orders.html" class="nav-link">
+                            <i class="bi bi-cart3 me-2"></i>Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/users.html" class="nav-link">
+                            <i class="bi bi-people me-2"></i>Users
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/data-dashboard.html" class="nav-link">
+                            <i class="bi bi-graph-up me-2"></i>Analytics
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pb-5">
+            <div class="page-head">
+                <div><h1>Dashboard</h1><p id="greeting">Today at Chillar Angadi</p></div>
+                <a href="/admin/data-dashboard.html" class="btn btn-outline-primary btn-sm"><i class="bi bi-graph-up"></i> Open analytics</a>
+            </div>
 
-        async function loadDashboardData() {
-            try {
-                // Load stats
-                const statsResponse = await fetch('/api/v1/dashboard/stats');
-                if (statsResponse.ok) {
-                    const stats = await statsResponse.json();
-                    document.getElementById('total-orders').textContent = stats.totalOrders || 0;
-                    document.getElementById('total-products').textContent = stats.totalProducts || 0;
-                    document.getElementById('total-users').textContent = stats.totalUsers || 0;
-                }
+            <div class="row g-3">
+                <div class="col-sm-6 col-xl-3"><div class="card stat-card accent">
+                    <div class="label">Revenue (all time)</div><div class="value" id="s-revenue">—</div><div class="sub">Excludes cancelled orders</div>
+                </div></div>
+                <div class="col-sm-6 col-xl-3"><div class="card stat-card">
+                    <div class="label">Orders</div><div class="value" id="s-orders">—</div><div class="sub" id="s-orders-sub"></div>
+                </div></div>
+                <div class="col-sm-6 col-xl-3"><div class="card stat-card">
+                    <div class="label">Products</div><div class="value" id="s-products">—</div><div class="sub" id="s-products-sub"></div>
+                </div></div>
+                <div class="col-sm-6 col-xl-3"><div class="card stat-card">
+                    <div class="label">Accounts</div><div class="value" id="s-users">—</div><div class="sub" id="s-users-sub"></div>
+                </div></div>
+            </div>
 
-                // Load recent orders
-                const ordersResponse = await fetch('/api/v1/orders?page=0&size=5');
-                if (ordersResponse.ok) {
-                    const data = await ordersResponse.json();
-                    const ordersTable = document.getElementById('recent-orders');
+            <div class="row g-3 mt-1">
+                <div class="col-lg-8">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span>Recent orders</span>
+                            <a href="/admin/orders.html" class="btn btn-sm btn-outline-primary">View all</a>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead><tr><th class="ps-3">Order</th><th>Customer</th><th>Date</th><th class="text-end">Amount</th><th>Status</th></tr></thead>
+                                    <tbody id="recent-orders"><tr><td colspan="5" class="empty-note">Loading orders…</td></tr></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span>Running low</span>
+                            <a href="/admin/products.html" class="btn btn-sm btn-outline-primary">Restock</a>
+                        </div>
+                        <ul class="list-group list-group-flush" id="low-stock"><li class="list-group-item empty-note">Loading…</li></ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
 
-                    if (data.orders && data.orders.length > 0) {
-                        ordersTable.innerHTML = data.orders.map(order => `
-                            <tr>
-                                <td>#${order.id}</td>
-                                <td>${order.customerName}</td>
-                                <td>${new Date(order.orderTime).toLocaleDateString()}</td>
-                                <td>$${order.totalAmount?.toFixed(2) || '0.00'}</td>
-                                <td>
-                                    <span class="badge bg-${getStatusBadgeClass(order.status)}">
-                                        ${order.status}
-                                    </span>
-                                </td>
-                                <td>
-                                    <a href="/admin/orders.html?id=${order.id}" class="btn btn-sm btn-outline-primary">
-                                        View
-                                    </a>
-                                </td>
-                            </tr>
-                        `).join('');
-                    } else {
-                        ordersTable.innerHTML = '<tr><td colspan="6" class="text-center">No orders found</td></tr>';
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading dashboard data:', error);
-            }
-        }
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Shared helpers for admin pages
+    const inr = n => '₹' + Number(n || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const toDate = t => new Date(typeof t === 'number' ? (t < 1e12 ? t * 1000 : t) : t);
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const hour = new Date().getHours();
+        document.getElementById('greeting').textContent =
+            (hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening') + ' — here is how the shop is doing.';
 
-        function getStatusBadgeClass(status) {
-            switch(status?.toUpperCase()) {
-                case 'PENDING': return 'warning';
-                case 'PROCESSING': return 'info';
-                case 'COMPLETED': return 'success';
-                case 'CANCELLED': return 'danger';
-                default: return 'secondary';
-            }
-        }
-    </script>
+        try {
+            const s = await (await fetch('/api/v1/dashboard/stats')).json();
+            document.getElementById('s-revenue').textContent = inr(s.revenue);
+            document.getElementById('s-orders').textContent = s.totalOrders;
+            document.getElementById('s-orders-sub').innerHTML =
+                `<span class="${s.pendingOrders ? 'down' : 'up'}">${s.pendingOrders} pending</span> · ${s.ordersThisMonth} this month (${s.ordersLastMonth} last month)`;
+            document.getElementById('s-products').textContent = s.totalProducts;
+            document.getElementById('s-products-sub').innerHTML =
+                `<span class="${s.lowStock ? 'down' : 'up'}">${s.lowStock} running low</span> · ${s.outOfStock} out of stock`;
+            document.getElementById('s-users').textContent = s.totalUsers;
+            document.getElementById('s-users-sub').textContent = `${s.newUsersThisWeek} joined in the last 7 days`;
+        } catch (e) { console.error('Stats failed', e); }
+
+        try {
+            const data = await (await fetch('/api/v1/orders?page=0&size=6')).json();
+            const rows = (data.orders || []).map(o => `
+                <tr>
+                    <td class="ps-3 fw-bold">#${o.id}</td>
+                    <td>${esc(o.customerName)}</td>
+                    <td>${toDate(o.orderTime).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
+                    <td class="text-end">${inr(o.totalAmount)}</td>
+                    <td><span class="status-pill ${esc(o.status)}">${esc(o.status)}</span></td>
+                </tr>`).join('');
+            document.getElementById('recent-orders').innerHTML = rows || '<tr><td colspan="5" class="empty-note">No orders yet</td></tr>';
+        } catch (e) { document.getElementById('recent-orders').innerHTML = '<tr><td colspan="5" class="empty-note">Could not load orders</td></tr>'; }
+
+        try {
+            const data = await (await fetch('/api/v1/products?size=200')).json();
+            const low = (data.products || []).filter(p => p.quantity <= 15).sort((a, b) => a.quantity - b.quantity).slice(0, 6);
+            document.getElementById('low-stock').innerHTML = low.length
+                ? low.map(p => `<li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                        <span>${esc(p.name)}</span>
+                        <span class="status-pill ${p.quantity <= 0 ? 'CANCELLED' : 'PENDING'}">${p.quantity <= 0 ? 'OUT' : p.quantity + ' left'}</span>
+                    </li>`).join('')
+                : '<li class="list-group-item empty-note bg-transparent">Everything is well stocked</li>';
+        } catch (e) { document.getElementById('low-stock').innerHTML = '<li class="list-group-item empty-note">Could not load stock</li>'; }
+    });
+</script>
+<script src="/js/admin-session.js"></script>
 </body>
 </html>

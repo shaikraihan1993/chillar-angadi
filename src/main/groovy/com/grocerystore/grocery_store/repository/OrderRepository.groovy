@@ -6,5 +6,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface OrderRepository extends JpaRepository<Order, Long> {
+    List<Order> findByUser_IdOrderByOrderTimeDesc(Long userId)
+
     Page<Order> findByCustomerNameContainingIgnoreCaseOrPhoneNumberContainingIgnoreCase(String customerName, String phoneNumber, Pageable pageable)
 }
