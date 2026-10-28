@@ -1,0 +1,103 @@
+/* Chillar Angadi admin theme: layered over Bootstrap 5 so existing admin markup keeps working. */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --ca-cream: #f6f1e4;
+    --ca-cream-2: #efe7d3;
+    --ca-paper: #fffdf7;
+    --ca-ink: #1e2a1a;
+    --ca-ink-soft: #5b6552;
+    --ca-olive: #7c9a2c;
+    --ca-olive-deep: #4f6b16;
+    --ca-teal: #5fb3ae;
+    --ca-carrot: #f08a24;
+    --ca-apple: #d8402b;
+    --ca-line: rgba(30, 42, 26, .12);
+
+    --bs-body-font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+    --bs-body-bg: var(--ca-cream);
+    --bs-body-color: var(--ca-ink);
+    --bs-border-color: var(--ca-line);
+    --bs-primary: #4f6b16;
+    --bs-primary-rgb: 79, 107, 22;
+    --bs-success: #7c9a2c;
+    --bs-success-rgb: 124, 154, 44;
+    --bs-warning: #f08a24;
+    --bs-warning-rgb: 240, 138, 36;
+    --bs-info: #5fb3ae;
+    --bs-info-rgb: 95, 179, 174;
+    --bs-danger: #d8402b;
+    --bs-danger-rgb: 216, 64, 43;
+    --bs-link-color: #4f6b16;
+    --bs-link-hover-color: #1e2a1a;
+    --bs-link-color-rgb: 79, 107, 22;
+}
+
+body { background: var(--ca-cream); color: var(--ca-ink); -webkit-font-smoothing: antialiased; }
+h1, h2, h3, .h1, .h2, .h3, .card-title, .modal-title { font-family: 'Fraunces', Georgia, serif; letter-spacing: -.015em; }
+h1, .h1, .h2 { font-weight: 600; }
+
+/* Top bar */
+.navbar { background: var(--ca-ink) !important; padding: .55rem 0; }
+.navbar-brand { font-family: 'Fraunces', Georgia, serif; font-weight: 700; display: flex; align-items: center; gap: .6rem; }
+.navbar-brand .brand-mark { width: 34px; height: 34px; border-radius: 50%; background: var(--ca-cream); object-fit: cover; }
+.navbar-brand .brand-sub { font-family: 'Manrope', sans-serif; font-size: .7rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--ca-carrot); }
+.navbar .btn-outline-light { border-radius: 999px; border-color: rgba(246, 241, 228, .35); font-weight: 600; }
+.navbar .btn-outline-light:hover { background: var(--ca-cream); color: var(--ca-ink); }
+
+/* Sidebar */
+.sidebar { background: transparent !important; border-right: 1px solid var(--ca-line); }
+.sidebar .nav-link, .nav-pills .nav-link {
+    color: var(--ca-ink-soft) !important; font-weight: 600; border-radius: 999px !important;
+    margin: 3px 10px; padding: 9px 16px; transition: background .2s, color .2s;
+}
+.sidebar .nav-link:hover { background: var(--ca-cream-2) !important; color: var(--ca-ink) !important; }
+.sidebar .nav-link.active, .nav-pills .nav-link.active { background: var(--ca-ink) !important; color: var(--ca-cream) !important; }
+
+/* Cards & tables */
+.card { background: var(--ca-paper); border: 1px solid var(--ca-line) !important; border-radius: 20px; box-shadow: none !important; }
+.card-header { background: transparent !important; border-bottom: 1px solid var(--ca-line); font-weight: 700; border-radius: 20px 20px 0 0 !important; }
+.table { --bs-table-bg: transparent; --bs-table-hover-bg: rgba(124, 154, 44, .07); }
+.table thead th { font-size: .74rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ca-ink-soft); font-weight: 800; border-bottom-color: var(--ca-line); background: transparent !important; }
+.table-light, .table-light th { --bs-table-bg: transparent; }
+
+/* Buttons & form controls */
+.btn { border-radius: 999px; font-weight: 700; }
+.btn-primary, .btn-success { background: var(--ca-ink); border-color: var(--ca-ink); color: var(--ca-cream); }
+.btn-primary:hover, .btn-success:hover, .btn-primary:focus, .btn-success:focus { background: var(--ca-olive); border-color: var(--ca-olive); color: #fff; }
+.btn-outline-primary { color: var(--ca-olive-deep); border-color: var(--ca-olive); }
+.btn-outline-primary:hover, .btn-outline-primary.active { background: var(--ca-olive); border-color: var(--ca-olive); color: #fff; }
+.btn-outline-secondary { color: var(--ca-ink); border-color: var(--ca-line); }
+.btn-outline-secondary:hover, .btn-outline-secondary.active, .btn-check:checked + .btn-outline-secondary { background: var(--ca-ink); border-color: var(--ca-ink); color: var(--ca-cream); }
+.btn-secondary { background: var(--ca-cream-2); border-color: var(--ca-cream-2); color: var(--ca-ink); }
+.form-control, .form-select { border-radius: 12px; border-color: var(--ca-line); background-color: var(--ca-paper); }
+.form-control:focus, .form-select:focus { border-color: var(--ca-olive); box-shadow: 0 0 0 .2rem rgba(124, 154, 44, .2); }
+.page-link { color: var(--ca-ink); border-color: var(--ca-line); }
+.page-item.active .page-link { background: var(--ca-ink); border-color: var(--ca-ink); }
+.modal-content { border-radius: 22px; border: 0; background: var(--ca-paper); }
+.badge { font-weight: 800; letter-spacing: .04em; border-radius: 999px; padding: .4em .75em; }
+.text-primary { color: var(--ca-olive-deep) !important; }
+
+/* Shared admin pieces */
+.page-head { display: flex; justify-content: space-between; align-items: end; flex-wrap: wrap; gap: 12px; padding: 22px 0 18px; }
+.page-head h1 { margin: 0; font-size: 2.1rem; }
+.page-head p { margin: 4px 0 0; color: var(--ca-ink-soft); }
+.stat-card { padding: 20px 22px; height: 100%; }
+.stat-card .label { font-size: .74rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--ca-ink-soft); }
+.stat-card .value { font-family: 'Fraunces', Georgia, serif; font-size: 2.2rem; font-weight: 600; letter-spacing: -.02em; line-height: 1.1; margin: 6px 0 4px; }
+.stat-card .sub { font-size: .86rem; color: var(--ca-ink-soft); }
+.stat-card .sub .up { color: var(--ca-olive-deep); font-weight: 700; }
+.stat-card .sub .down { color: var(--ca-apple); font-weight: 700; }
+.stat-card.accent { background: var(--ca-ink); color: var(--ca-cream); border-color: var(--ca-ink) !important; }
+.stat-card.accent .label, .stat-card.accent .sub { color: rgba(246, 241, 228, .65); }
+.stat-card.accent .sub .up { color: #b9d36b; }
+.status-pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: .7rem; font-weight: 800; letter-spacing: .06em; background: var(--ca-cream-2); }
+.status-pill.PENDING { background: rgba(240, 138, 36, .2); color: #a2560c; }
+.status-pill.CONFIRMED, .status-pill.SHIPPED { background: rgba(95, 179, 174, .22); color: #2f7a75; }
+.status-pill.DELIVERED { background: rgba(124, 154, 44, .2); color: var(--ca-olive-deep); }
+.status-pill.CANCELLED { background: rgba(216, 64, 43, .14); color: var(--ca-apple); }
+.role-pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: .7rem; font-weight: 800; letter-spacing: .06em; }
+.role-pill.admin { background: var(--ca-ink); color: var(--ca-cream); }
+.role-pill.customer { background: var(--ca-cream-2); color: var(--ca-ink); }
+.avatar-sm { width: 36px; height: 36px; border-radius: 50%; display: inline-grid; place-items: center; background: var(--ca-olive); color: #fff; font-weight: 800; font-size: .8rem; flex: none; }
+.empty-note { padding: 28px; text-align: center; color: var(--ca-ink-soft); }

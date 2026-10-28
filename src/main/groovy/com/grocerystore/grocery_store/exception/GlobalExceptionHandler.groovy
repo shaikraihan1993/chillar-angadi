@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
+import org.springframework.web.servlet.resource.NoResourceFoundException
 import java.time.LocalDateTime
 
 @ControllerAdvice
@@ -30,6 +31,18 @@ class GlobalExceptionHandler {
             "INSUFFICIENT_STOCK"
         )
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST)
+    }
+
+    // A page or file that doesn't exist is a 404, not a server error
+    @ExceptionHandler(NoResourceFoundException.class)
+    ResponseEntity<ErrorDetails> handleNoResourceFound(NoResourceFoundException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(
+            LocalDateTime.now(),
+            "Not found: /${ex.resourcePath}",
+            request.getDescription(false),
+            "NOT_FOUND"
+        )
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND)
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

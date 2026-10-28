@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Products - Grocery Store Admin</title>
+    <title>Products — Chillar Angadi Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-    <link rel="icon" type="image/png" href="/images/logo.png">
+    <link rel="icon" type="image/png" href="/images/logo-mark.png">
     <style>
         .sidebar {
             min-height: calc(100vh - 56px);
@@ -76,15 +76,16 @@
             white-space: nowrap;
         }
     </style>
+    <link rel="stylesheet" href="/css/admin-theme.css">
 </head>
 <body>
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+<nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">Grocery Store Admin</a>
+        <a class="navbar-brand" href="/admin/index.html"><img src="/images/logo-mark.png" alt="" class="brand-mark">Chillar Angadi <span class="brand-sub">Admin</span></a>
         <div>
-            <a href="/store.html" class="btn btn-outline-light me-2">
-                <i class="bi bi-shop"></i> Back to Store
+            <a href="/store.html" class="btn btn-outline-light btn-sm me-2">
+                <i class="bi bi-shop"></i> View store
             </a>
         </div>
     </div>
@@ -98,26 +99,27 @@
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
                         <a href="/admin/index.html" class="nav-link">
-                            <i class="bi bi-speedometer2 me-2"></i>
-                            Dashboard
+                            <i class="bi bi-speedometer2 me-2"></i>Dashboard
                         </a>
                     </li>
-                    <li>
-                        <a href="/admin/products.html" class="nav-link active">
-                            <i class="bi bi-box-seam me-2"></i>
-                            Products
+                    <li class="nav-item">
+                        <a href="/admin/products.html" class="nav-link active" aria-current="page">
+                            <i class="bi bi-box-seam me-2"></i>Products
                         </a>
                     </li>
-                    <li>
+                    <li class="nav-item">
                         <a href="/admin/orders.html" class="nav-link">
-                            <i class="bi bi-cart3 me-2"></i>
-                            Orders
+                            <i class="bi bi-cart3 me-2"></i>Orders
                         </a>
                     </li>
-                    <li>
+                    <li class="nav-item">
                         <a href="/admin/users.html" class="nav-link">
-                            <i class="bi bi-people me-2"></i>
-                            Users
+                            <i class="bi bi-people me-2"></i>Users
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/data-dashboard.html" class="nav-link">
+                            <i class="bi bi-graph-up me-2"></i>Analytics
                         </a>
                     </li>
                 </ul>
@@ -254,7 +256,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="price" class="form-label">Price</label>
+                            <label for="price" class="form-label">Price (₹)</label>
                             <input type="number" class="form-control" id="price" step="0.01" required>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -483,7 +485,7 @@
                               (product.subCategory.displayName || product.subCategory.name || 'N/A') :
                               (product.subCategory || 'N/A');
             const brand = product.brand || 'N/A';
-            const price = product.price ? `$${parseFloat(product.price).toFixed(2)}` : '$0.00';
+            const price = product.price ? `₹${parseFloat(product.price).toFixed(2)}` : '₹0.00';
             const quantity = product.quantity || 0;
             const unit = product.unit || '';
             const stock = quantity + ' ' + (unit.displayName || unit.symbol || unit || '');

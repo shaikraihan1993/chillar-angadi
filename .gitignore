@@ -44,3 +44,6 @@ uploads/
 mysql-config/
 logs/
 
+
+### Local admin credentials ###
+ADMIN_CREDENTIALS.local.txt

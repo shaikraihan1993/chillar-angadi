@@ -13,7 +13,7 @@
         } catch { /* offline: leave the navbar alone */ }
         if (!me || me.role !== 'ROLE_ADMIN') { location.replace('/admin/login?next=' + encodeURIComponent(location.pathname)); return; }
 
-        const storeLink = [...document.querySelectorAll('nav a')].find(a => /Back to Store/i.test(a.textContent));
+        const storeLink = [...document.querySelectorAll('nav a')].find(a => /Back to Store|View store/i.test(a.textContent));
         const host = storeLink?.parentElement || document.querySelector('nav .container-fluid, nav .container, nav');
         if (!host) return;
 
