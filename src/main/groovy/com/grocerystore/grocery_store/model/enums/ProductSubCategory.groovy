@@ -40,6 +40,7 @@ enum ProductSubCategory {
     POPCORN('Popcorn', ProductCategory.SNACKS),
     CRACKERS('Crackers', ProductCategory.SNACKS),
     CANDY_AND_CHOCOLATE('Candy & Chocolate', ProductCategory.SNACKS),
+    INDIAN_SWEETS('Indian Sweets', ProductCategory.SNACKS),
 
     // Frozen Foods
     FROZEN_MEALS('Frozen Meals', ProductCategory.FROZEN_FOODS),
@@ -55,12 +56,19 @@ enum ProductSubCategory {
     SAUCES_AND_CONDIMENTS('Sauces & Condiments', ProductCategory.PANTRY),
     COOKING_OIL('Cooking Oil', ProductCategory.PANTRY),
     BAKING_SUPPLIES('Baking Supplies', ProductCategory.PANTRY),
+    PULSES_AND_DALS('Pulses & Dals', ProductCategory.PANTRY),
+    FLOURS_AND_ATTA('Flours & Atta', ProductCategory.PANTRY),
+    SPICES_AND_SALT('Spices & Salt', ProductCategory.PANTRY),
+    SWEETENERS('Honey & Sweeteners', ProductCategory.PANTRY),
 
     // Household
     CLEANING_SUPPLIES('Cleaning Supplies', ProductCategory.HOUSEHOLD),
     LAUNDRY('Laundry', ProductCategory.HOUSEHOLD),
     PAPER_PRODUCTS('Paper Products', ProductCategory.HOUSEHOLD),
     KITCHEN_SUPPLIES('Kitchen Supplies', ProductCategory.HOUSEHOLD),
+    STATIONERY('Stationery', ProductCategory.HOUSEHOLD),
+    HOME_DECOR('Home Decor', ProductCategory.HOUSEHOLD),
+    BAGS_AND_ACCESSORIES('Bags & Accessories', ProductCategory.HOUSEHOLD),
 
     // Personal Care
     BATH_AND_BODY('Bath & Body', ProductCategory.PERSONAL_CARE),

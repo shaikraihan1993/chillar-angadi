@@ -47,3 +47,6 @@ logs/
 
 ### Local admin credentials ###
 ADMIN_CREDENTIALS.local.txt
+
+### Technical guide PDF (contains admin credentials) ###
+docs/Chillar_Angadi_Technical_Guide.pdf

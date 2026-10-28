@@ -3,6 +3,7 @@ package com.grocerystore.grocery_store.service
 import com.grocerystore.grocery_store.exception.ResourceNotFoundException
 import com.grocerystore.grocery_store.model.Product
 import com.grocerystore.grocery_store.model.ProductImage
+import com.grocerystore.grocery_store.repository.ProductImageRepository
 import com.grocerystore.grocery_store.repository.ProductRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -16,9 +17,11 @@ import java.util.NoSuchElementException
 class ProductService {
 
     private final ProductRepository productRepository
+    private final ProductImageRepository productImageRepository
 
-    ProductService(ProductRepository productRepository) {
+    ProductService(ProductRepository productRepository, ProductImageRepository productImageRepository) {
         this.productRepository = productRepository
+        this.productImageRepository = productImageRepository
     }
 
 
@@ -163,9 +166,19 @@ class ProductService {
         return productRepository.save(product)
     }
 
+    /**
+     * Deletes a product and its images. Past orders are unaffected: order lines keep
+     * their own copy of the product name and price.
+     */
+    @Transactional
     void delete(Long id) {
-        // findById will throw NoSuchElementException if not found
-        findById(id)
-        productRepository.deleteById(id)
+        Product product = findById(id)   // throws ResourceNotFoundException if missing
+        Long imageId = product.image?.id
+        // products.image_id -> product_images and product_images.product_id -> products point at
+        // each other, so unlink the image, remove the image rows, then remove the product.
+        product.image = null
+        productRepository.saveAndFlush(product)
+        productImageRepository.deleteForProduct(id, imageId ?: -1L)
+        productRepository.delete(product)
     }
 }

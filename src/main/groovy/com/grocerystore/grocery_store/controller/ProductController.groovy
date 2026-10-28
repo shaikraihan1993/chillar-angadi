@@ -146,14 +146,14 @@ class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+    ResponseEntity<?> deleteProduct(@PathVariable Long id) {
         try {
             productService.delete(id)
             new ResponseEntity<>(HttpStatus.NO_CONTENT)
-        } catch (NoSuchElementException e) {
-            new ResponseEntity<>(HttpStatus.NOT_FOUND)
+        } catch (ResourceNotFoundException | NoSuchElementException e) {
+            new ResponseEntity<>([message: "Product ${id} not found".toString()], HttpStatus.NOT_FOUND)
         } catch (Exception e) {
-            new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR)
+            new ResponseEntity<>([message: "Could not delete product ${id}: ${e.message}".toString()], HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 

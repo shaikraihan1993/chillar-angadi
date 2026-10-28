@@ -220,11 +220,15 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="brand" class="form-label">Brand</label>
-                            <input type="text" class="form-control" id="brand" required>
+                            <select class="form-select" id="brand" required data-kind="brand">
+                                <option value="">Select brand</option>
+                            </select>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="manufacturer" class="form-label">Manufacturer</label>
-                            <input type="text" class="form-control" id="manufacturer">
+                            <select class="form-select" id="manufacturer" data-kind="manufacturer">
+                                <option value="">Select manufacturer</option>
+                            </select>
                         </div>
                     </div>
 
@@ -245,13 +249,10 @@
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="quantity" class="form-label">Quantity</label>
-                            <div class="input-group">
-                                <input type="number" class="form-control" id="quantity" min="0" required>
-                                <select class="form-select" id="unit" style="max-width: 100px;">
-                                    <option value="">Unit</option>
-                                </select>
-                            </div>
+                            <label for="unit" class="form-label">Sold per</label>
+                            <select class="form-select" id="unit">
+                                <option value="">Unit</option>
+                            </select>
                         </div>
                     </div>
                     <div class="row">
@@ -383,6 +384,72 @@
         });
     }
 
+    // ---- Brand / manufacturer dropdowns ----
+    // Choices come from /api/v1/enums/brands and /manufacturers; the last option adds a new one.
+    const NEW_OPTION = '__new__';
+    const NAMED_LABELS = { brand: 'brand', manufacturer: 'manufacturer' };
+
+    async function loadNamedOptions(kind) {
+        const select = document.getElementById(kind);
+        if (!select) return;
+        try {
+            const res = await fetch(`/api/v1/enums/${kind}s`);
+            if (!res.ok) throw new Error(res.status);
+            const items = await res.json();
+            const current = select.value;
+            select.innerHTML = `<option value="">Select ${NAMED_LABELS[kind]}</option>` +
+                items.map(i => `<option value="${escapeAttr(i.name)}">${escapeAttr(i.name)}</option>`).join('') +
+                `<option value="${NEW_OPTION}">+ Add new ${NAMED_LABELS[kind]}…</option>`;
+            if (current && current !== NEW_OPTION) setNamedValue(kind, current);
+        } catch (e) {
+            console.error(`Failed to load ${kind}s`, e);
+        }
+    }
+
+    // Select a value, adding it as an option first if an older product uses a name not in the list
+    function setNamedValue(kind, value) {
+        const select = document.getElementById(kind);
+        if (!select) return;
+        if (value && ![...select.options].some(o => o.value === value)) {
+            const opt = new Option(value, value);
+            select.insertBefore(opt, select.querySelector(`option[value="${NEW_OPTION}"]`));
+        }
+        select.value = value || '';
+    }
+
+    function escapeAttr(s) {
+        return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    async function onNamedSelectChange(e) {
+        const select = e.target;
+        if (select.value !== NEW_OPTION) return;
+        const kind = select.dataset.kind;
+        const name = (prompt(`New ${NAMED_LABELS[kind]} name:`) || '').trim();
+        if (!name) { select.value = select.dataset.previous || ''; return; }
+        try {
+            const res = await fetch(`/api/v1/enums/${kind}s`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name })
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.message || 'Could not add it');
+            await loadNamedOptions(kind);
+            setNamedValue(kind, data.name);
+            showAlert(`Added ${NAMED_LABELS[kind]} "${data.name}"`, 'success');
+        } catch (err) {
+            select.value = select.dataset.previous || '';
+            showAlert(err.message, 'danger');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        ['brand', 'manufacturer'].forEach(kind => {
+            const select = document.getElementById(kind);
+            select?.addEventListener('focus', () => { select.dataset.previous = select.value; });
+            select?.addEventListener('change', onNamedSelectChange);
+        });
+    });
+
     // Function to load enums from the server
     async function loadEnums() {
         try {
@@ -412,6 +479,10 @@
             } else {
                 console.error('Failed to load units:', await unitResponse.text());
             }
+
+            // Brand and manufacturer choices
+            await loadNamedOptions('brand');
+            await loadNamedOptions('manufacturer');
 
             // Initialize the form
             updateSubcategories();
@@ -618,8 +689,8 @@
             document.getElementById('stock').value = product.quantity || '';
 
             // Populate brand and manufacturer
-            document.getElementById('brand').value = product.brand || '';
-            document.getElementById('manufacturer').value = product.manufacturer || '';
+            setNamedValue('brand', product.brand || '');
+            setNamedValue('manufacturer', product.manufacturer || '');
 
             // Populate category - need to find the enum value from display name
             const categorySelect = document.getElementById('category');
