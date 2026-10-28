@@ -186,7 +186,8 @@ docker-compose up -d --build
 
 ## Production Deployment
 
-For production deployment:
+There is no production Compose file yet: `docker-compose.yml` is for local development. Before deploying, create a production setup that covers the points below.
+
 
 1. **Update environment variables** in `.env` with secure credentials
 2. **Use secrets management** instead of plain text passwords
@@ -201,7 +202,6 @@ Example production-ready changes:
 # Use environment variables for sensitive data
 environment:
   SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-  JWT_SECRET: ${JWT_SECRET}
 
 # Add restart policy
 restart: always
