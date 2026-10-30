@@ -1,5 +1,5 @@
 # Multi-stage build for Spring Boot Gradle application
-FROM gradle:8.5-jdk17 AS build
+FROM gradle:8.5-jdk17-jammy AS build
 
 # Set working directory
 WORKDIR /app
@@ -15,13 +15,13 @@ COPY src ./src
 RUN gradle clean build -x test --no-daemon
 
 # Runtime stage
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:17-jre-jammy
 
 # Set working directory
 WORKDIR /app
 
 # Create a non-root user
-RUN addgroup -S spring && adduser -S spring -G spring
+RUN addgroup --system spring && adduser --system --ingroup spring spring
 
 # Create upload directory
 RUN mkdir -p /app/uploads && chown -R spring:spring /app
@@ -43,7 +43,7 @@ ENV JAVA_OPTS="-Xmx512m -Xms256m"
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:8089/actuator/health || exit 1
+  CMD curl -f http://localhost:8089/actuator/health || exit 1
 
 # Run the application
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
